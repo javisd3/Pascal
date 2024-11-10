@@ -62,7 +62,6 @@ begin
         if (tipoBarco <> 'Submarino') and (tipoBarco <> 'Dragaminas') and
            (tipoBarco <> 'Fragata') and (tipoBarco <> 'PortaAviones') then
         begin
-            writeln('Tipo de barco no valido. Intenta de nuevo.');
             continue;
         end;
 
