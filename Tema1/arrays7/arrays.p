@@ -50,19 +50,13 @@ begin
     
     while i <= MaxBarcos do
     begin
-        writeln('Introduce el tipo de barco (Submarino, Dragaminas, Fragata, PortaAviones) o escribe "FIN" para terminar:');
+        writeln('Introduce el tipo de barco (Submarino, Dragaminas, Fragata, PortaAviones)');
         readln(tipoBarco);
 
         if tipoBarco = 'FIN' then
         begin
             NumBarcos := i - 1;  
             Break;
-        end;
-
-        if (tipoBarco <> 'Submarino') and (tipoBarco <> 'Dragaminas') and
-           (tipoBarco <> 'Fragata') and (tipoBarco <> 'PortaAviones') then
-        begin
-            continue;
         end;
 
         if tipoBarco = 'Submarino' then
