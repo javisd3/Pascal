@@ -12,7 +12,7 @@ type
   TRango = (Invitado, Aspirante, Maestro);
   TPalo = (Oros, Copas, Espadas, Bastos);
   TCarta = record
-    numero: integer;  
+    numero: 1..12;  
     palo: TPalo;      
   end;
   TJugador = record
