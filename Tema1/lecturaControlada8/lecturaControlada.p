@@ -1,4 +1,4 @@
-program juego_barcos;
+program lecturaControlada;
 
 const
     MaxFilas = 10;
