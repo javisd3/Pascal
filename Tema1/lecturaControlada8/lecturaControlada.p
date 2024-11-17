@@ -8,7 +8,6 @@ const
 type
     TipoBarco = (Submarino, Dragaminas, Fragata, PortaAviones);
     TipoOrientacion = (Horizontal, Vertical);
-    TipoEstado = (Intacto, Tocado, Hundido);
     TipoCasilla = record
         f: integer;
         c: char;
@@ -17,7 +16,6 @@ type
         barco: TipoBarco;
         orientacion: TipoOrientacion;
         proa: TipoCasilla;
-        estado: TipoEstado;
     end;
     TipoTablero = array[1..MaxFilas, 'A'..'J'] of char;
     TipoFlota = array[1..MaxBarcos] of TipoBarcoTotal;
@@ -86,7 +84,6 @@ begin
 
             Flota[i].proa.c := columna;
             Flota[i].proa.f := fila;
-            Flota[i].estado := Intacto;
             i := i + 1;
         end
         else
