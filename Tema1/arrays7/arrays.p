@@ -167,9 +167,6 @@ begin
     end;
 end;
 
-var
-    i: integer;
-
 begin
     writeln('Introduce el numero de filas del tablero:');
     readln(Filas);

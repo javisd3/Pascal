@@ -26,7 +26,6 @@ var
     Tablero: TipoTablero;
     Flota: TipoFlota;
     NumBarcos: integer;
-    NumHundidos: integer;
 
 procedure InicializarTablero(var T: TipoTablero);
 var
