@@ -122,10 +122,10 @@ var
     c: char;
     inicial: char;
 begin
-    longitud := CasillasBarco(Barco.barco);
+    longitud := CasillasBarco(barco.barco);
     f := Barco.proa.f;
     c := Barco.proa.c;
-    inicial := InicialDelBarco(Barco.barco);
+    inicial := InicialDelBarco(barco.barco);
 
     for i := 0 to longitud - 1 do
     begin
