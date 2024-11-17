@@ -38,26 +38,6 @@ begin
             T[f, c] := '.';
 end;
 
-function CasillasBarco(barco: TipoBarco): integer;
-begin
-    case barco of
-        Submarino: CasillasBarco := 1;
-        Dragaminas: CasillasBarco := 2;
-        Fragata: CasillasBarco := 3;
-        PortaAviones: CasillasBarco := 4;
-    end;
-end;
-
-function InicialDelBarco(barco: TipoBarco): char;
-begin
-    case barco of
-        Submarino: InicialDelBarco := 'S';
-        Dragaminas: InicialDelBarco := 'D';
-        Fragata: InicialDelBarco := 'F';
-        PortaAviones: InicialDelBarco := 'P';
-    end;
-end;
-
 procedure LeerFlota(var Flota: TipoFlota; var NumBarcos: integer);
 var
     tipoBarco, orientacion: string;
@@ -117,6 +97,26 @@ begin
         end;
     end;
     NumBarcos := i - 1;
+end;
+
+function CasillasBarco(barco: TipoBarco): integer;
+begin
+    case barco of
+        Submarino: CasillasBarco := 1;
+        Dragaminas: CasillasBarco := 2;
+        Fragata: CasillasBarco := 3;
+        PortaAviones: CasillasBarco := 4;
+    end;
+end;
+
+function InicialDelBarco(barco: TipoBarco): char;
+begin
+    case barco of
+        Submarino: InicialDelBarco := 'S';
+        Dragaminas: InicialDelBarco := 'D';
+        Fragata: InicialDelBarco := 'F';
+        PortaAviones: InicialDelBarco := 'P';
+    end;
 end;
 
 procedure ColocarBarco(var T: TipoTablero; Barco: TipoBarcoTotal);
