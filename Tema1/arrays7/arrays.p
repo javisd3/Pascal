@@ -56,7 +56,7 @@ begin
     
     while i <= MaxBarcos do
     begin
-        writeln('Introduce el tipo de barco (Submarino, Dragaminas, Fragata, PortaAviones)');
+        writeln('Tipo de barco (Submarino, Dragaminas, Fragata, PortaAviones)');
         readln(tipoBarco);
 
         if tipoBarco = 'FIN' then
@@ -74,16 +74,16 @@ begin
         else
             Flota[i].barco := PortaAviones;
 
-        writeln('Introduce la orientacion (Horizontal/Vertical):');
+        writeln('Orientacion:');
         readln(Flota[i].orientacion);
         
-        writeln('Introduce la columna de la proa (A-T):');
+        writeln('Columna de la proa:');
         readln(Flota[i].proa.c);
 
-        writeln('Introduce la fila de la proa (1-20):');
+        writeln('Fila de la proa:');
         readln(Flota[i].proa.f);
 
-        writeln('Introduce el estado del barco (Tocado/Hundido):');
+        writeln('Estado del barco:');
         readln(Flota[i].estado);
 
         i := i + 1;
@@ -168,9 +168,9 @@ begin
 end;
 
 begin
-    writeln('Introduce el numero de filas del tablero:');
+    writeln('Numero de filas del tablero:');
     readln(Filas);
-    writeln('Introduce el numero de columnas del tablero:');
+    writeln('Numero de columnas del tablero:');
     readln(Columnas);
 
     InicializarTablero(Tablero);
