@@ -34,12 +34,6 @@ type
 
   TipoBarcos = array[1..MaxBarcos] of TipoBarco;
 
-function numeroALetra(num: integer): char;
-begin
-  if (num >= 1) and (num <= 26) then
-    numeroALetra := chr(ord('A') + num - 1)
-end;
-
 function letraANumero(letra: char): integer;
 begin
   if (letra >= 'A') and (letra <= 'Z') then
@@ -59,11 +53,12 @@ begin
     hayBarco := true;
     barco.nombre := entrada;
 
+    readln(barco.orientacion);
+
     readln(proaChr);
     barco.proa.columna := letraANumero(proaChr);
     readln(barco.proa.fila);
 
-    readln(barco.orientacion);
     readln(barco.estado);
   end;
 end;
@@ -90,26 +85,26 @@ end;
 
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
 var
-  popacolumna: integer;
-  popafila: integer;
+  procolumna: integer;
+  proafila: integer;
 begin
   if barco.orientacion = Horizontal then
   begin
-    popacolumna := barco.proa.columna + longitudbarco(barco) - 1;
-    ubicacionBarco := (casilla.fila = barco.proa.fila) and
+    procolumna := barco.proa.columna + longitudbarco(barco) - 1;
+    ubicacionBarco :=   (casilla.fila = barco.proa.fila) and
                         (casilla.columna >= barco.proa.columna) and
-                        (casilla.columna <= popacolumna);
+                        (casilla.columna <= procolumna);
   end
   else
   begin
-    popafila := barco.proa.fila + longitudbarco(barco) - 1;
-    ubicacionBarco := (casilla.columna = barco.proa.columna) and
+    proafila := barco.proa.fila + longitudbarco(barco) - 1;
+    ubicacionBarco :=   (casilla.columna = barco.proa.columna) and
                         (casilla.fila >= barco.proa.fila) and
-                        (casilla.fila <= popafila);
+                        (casilla.fila <= proafila);
   end;
 end;
 
-procedure dibujartablero(miBarcos: TipoBarcos; numBarcos: integer);
+procedure dibujartablero(Barcos: TipoBarcos; numBarcos: integer);
 var
   fila: integer;
   columna: integer;
@@ -127,13 +122,13 @@ begin
 
       for i := 1 to numBarcos do
       begin
-        if ubicacionBarco(miBarcos[i], casilla) then
+        if ubicacionBarco(Barcos[i], casilla) then
         begin
           hayBarco := true;
-          if miBarcos[i].estado = Hundido then
+          if Barcos[i].estado = Hundido then
             write('X', ' ')
           else
-            write(InicialDelBarco(miBarcos[i]), ' ');
+            write(InicialDelBarco(Barcos[i]), ' ');
           break;
         end;
       end;
@@ -146,7 +141,7 @@ begin
 end;
 
 var
-  miBarcos: TipoBarcos;
+  Barcos: TipoBarcos;
   numBarcos, numHundidos: integer;
   barco: TipoBarco;
   hayBarco: boolean;
@@ -154,9 +149,9 @@ begin
   numBarcos := 0;
   numHundidos := 0;
 
-  writeln('Numero de filas');
+  writeln('Numero de filas:');
   readln(numFilas);
-  writeln('Numero de columnas');
+  writeln('Numero de columnas:');
   readln(numColumnas);
 
   repeat
@@ -164,7 +159,7 @@ begin
     if hayBarco then
     begin
       numBarcos := numBarcos + 1;
-      miBarcos[numBarcos] := barco;
+      Barcos[numBarcos] := barco;
 
       if barco.estado = Hundido then
         numHundidos := numHundidos + 1;
@@ -174,5 +169,5 @@ begin
   writeln(numBarcos, ' barcos');
   writeln(numHundidos, ' hundidos');
 
-  dibujartablero(miBarcos, numBarcos);
+  dibujartablero(Barcos, numBarcos);
 end.
