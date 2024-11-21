@@ -21,15 +21,15 @@ type
     proa: TipoCasilla;
     orientacion: TipoOrientacion;
     caracter: char;
-    tocadas: array[1..MaxBarcos] of boolean;  // Para registrar si las casillas del barco han sido tocadas
-    longitud: integer;  // Longitud del barco
+    tocadas: array[1..MaxBarcos] of boolean;  
+    longitud: integer;  
   end;
 
   TipoBarcos = array[1..MaxBarcos] of TipoBarco;
 
 function esblanco(c: char): boolean;
 begin
-  esblanco := (c = ' ') or (c = #9);  // Espacio o tabulador
+  esblanco := (c = ' ') or (c = '   ');  
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
@@ -110,16 +110,16 @@ begin
       else if entrada = 'Portaaviones' then
         barco.nombre := Portaaviones;
 
-      readln(archivo, entrada);  // Leer orientación
+      readln(archivo, entrada);  
       if entrada = 'Horizontal' then
         barco.orientacion := Horizontal
       else
         barco.orientacion := Vertical;
 
-      readln(archivo, proaChr);  // Leer proa columna
+      readln(archivo, proaChr);  
       barco.proa.columna := letraANumero(proaChr);
 
-      readln(archivo, barco.proa.fila);  // Leer proa fila
+      readln(archivo, barco.proa.fila); 
     end;
   end;
 
@@ -133,6 +133,8 @@ begin
     Dragaminas: longitudbarco := 2;
     Fragata: longitudbarco := 3;
     Portaaviones: longitudbarco := 4;
+  else
+    longitudbarco := 0; 
   end;
 end;
 
@@ -143,6 +145,8 @@ begin
     Dragaminas: InicialDelBarco := 'D';
     Fragata: InicialDelBarco := 'F';
     Portaaviones: InicialDelBarco := 'P';
+  else
+    InicialDelBarco := 'X'; 
   end;
 end;
 
@@ -228,7 +232,7 @@ begin
     begin
       tocado := true;
       writeln('¡Tocado!');
-      exit;  // Termina el disparo si tocó un barco
+      exit; 
     end;
   end;
 
@@ -244,7 +248,6 @@ begin
   numBarcos := 0;
   hayBarco := false;
 
-  // Leer los barcos desde el archivo
   while not hayBarco do
   begin
     leerDatos(Barcos[numBarcos + 1], hayBarco);
@@ -252,10 +255,8 @@ begin
       numBarcos := numBarcos + 1;
   end;
 
-  // Dibujar el tablero con los barcos
   dibujarTablero(Barcos, numBarcos);
   
-  // Empezar los disparos después de haber terminado con "FIN"
   while true do
   begin
     disparar(Barcos, numBarcos);
