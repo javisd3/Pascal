@@ -100,7 +100,6 @@ begin
     if entrada <> 'FIN' then
     begin
       hayBarco := true;
-      // Asignar el tipo de barco
       if entrada = 'Submarino' then
         barco.nombre := Submarino
       else if entrada = 'Dragaminas' then
@@ -133,9 +132,6 @@ begin
     Dragaminas: longitudbarco := 2;
     Fragata: longitudbarco := 3;
     Portaaviones: longitudbarco := 4;
-  else
-    longitudbarco := 0; 
-  end;
 end;
 
 function InicialDelBarco(barco: TipoBarco): char;
@@ -145,9 +141,6 @@ begin
     Dragaminas: InicialDelBarco := 'D';
     Fragata: InicialDelBarco := 'F';
     Portaaviones: InicialDelBarco := 'P';
-  else
-    InicialDelBarco := 'X'; 
-  end;
 end;
 
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
@@ -162,7 +155,6 @@ begin
     ubicacionBarco :=   (casilla.fila = barco.proa.fila) and
                         (casilla.columna >= barco.proa.columna) and
                         (casilla.columna <= procolumna);
-    // Marcar casillas tocadas
     if ubicacionBarco then
     begin
       for i := barco.proa.columna to procolumna do
@@ -175,7 +167,6 @@ begin
     ubicacionBarco :=   (casilla.columna = barco.proa.columna) and
                         (casilla.fila >= barco.proa.fila) and
                         (casilla.fila <= proafila);
-    // Marcar casillas tocadas
     if ubicacionBarco then
     begin
       for i := barco.proa.fila to proafila do
