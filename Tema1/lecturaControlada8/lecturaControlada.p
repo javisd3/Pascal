@@ -29,7 +29,7 @@ type
 
 function esblanco(c: char): boolean;
 begin
-  esblanco := (c = ' ') or (c = '   ');  
+  esblanco := (c = ' ') or (c = '    '); 
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
@@ -84,18 +84,20 @@ end;
 
 procedure leerDatos(var barco: TipoBarco; var hayBarco: boolean);
 var
-  entrada: string; 
+  entrada: string;
   proaChr: char;
   archivo: text;
+  pal: TipoPal;  
 begin
   hayBarco := false;
-
+  
   Assign(archivo, 'datos.txt');
   Reset(archivo);
 
   if not EOF(archivo) then
   begin
     readln(archivo, entrada);
+    leerpal(archivo, pal);  
 
     if entrada <> 'FIN' then
     begin
@@ -212,23 +214,30 @@ var
   disparo: TipoCasilla;
   i: integer;
   tocado: boolean;
+  archivo: text;
 begin
-  writeln('Introduce las coordenadas de tu disparo (fila y columna):');
-  readln(disparo.fila, disparo.columna);
-  
-  tocado := false;
-  for i := 1 to numBarcos do
+  Assign(archivo, 'disparos.txt');
+  Reset(archivo);
+
+  while not EOF(archivo) do
   begin
-    if ubicacionBarco(Barcos[i], disparo) then
+    readln(archivo, disparo.fila, disparo.columna);
+
+    tocado := false;
+    for i := 1 to numBarcos do
     begin
-      tocado := true;
-      writeln('¡Tocado!');
-      exit; 
+      if ubicacionBarco(Barcos[i], disparo) then
+      begin
+        tocado := true;
+        writeln('Tocado');
+      end;
     end;
+
+    if not tocado then
+      writeln('Agua');
   end;
 
-  if not tocado then
-    writeln('¡Agua!');
+  Close(archivo);
 end;
 
 var
@@ -248,8 +257,5 @@ begin
 
   dibujarTablero(Barcos, numBarcos);
   
-  while true do
-  begin
-    disparar(Barcos, numBarcos);
-  end;
+  disparar(Barcos, numBarcos);  
 end.
