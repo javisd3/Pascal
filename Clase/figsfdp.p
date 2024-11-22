@@ -67,6 +67,7 @@ function esblanco(c: char): boolean;
 begin
 	result := (c = Esp) or (c = Tab);
 end;
+//Devuelve True si el carácter es un espacio o un tabulador. Devuelve False en caso contrario.
 
 procedure addcar(var pal: TipoPal; c: char);
 var
@@ -77,6 +78,7 @@ begin
 	setlength(pal, n);
 	pal[n] := c;
 end;
+//construir palabras (cadenas) a partir de los caracteres leídos 
 
 {si no hay pals, pal queda vacia }
 procedure leerpal(var fich: text; var pal: TipoPal);
@@ -106,6 +108,7 @@ begin
 		end;
 	end;
 end;
+//Agrega caracteres hasta que se forme pal = 'Rectangulo'.
 
 procedure leerinstr(var fich: text; var instr: TipoInstr; var ok: boolean);
 var
@@ -116,6 +119,7 @@ begin
 	val(pal, instr, pos);
 	ok := pos = 0;
 end;
+//la palabra pal se convierte a un valor de tipo TipoInstr
 
 procedure leernum(var fich: text; var n: integer; var ok: boolean);
 var
@@ -126,6 +130,7 @@ begin
 	val(pal, n, pos);
 	ok := pos = 0;
 end;
+//convierte la cadena "42" a un número entero 42 y lo asigna a n.
 
 procedure leercar(var fich: text; var c: char; var ok: boolean);
 var
@@ -137,6 +142,7 @@ begin
 		c := pal[1];
 	end;
 end;
+//Contendrá el carácter leído si la validación es exitosa.
 
 procedure leerpos(var fich: text; var pos: TipoPos; var ok: boolean);
 begin
@@ -145,6 +151,7 @@ begin
 		leernum(fich, pos.y, ok);
 	end;
 end;
+//Contendrá las coordenadas leídas (x e y) si ambas lecturas fueron exitosas.
 
 procedure leercmdpt(var fich: text; var pt: TipoCmdPt; var ok: boolean);
 begin
@@ -153,6 +160,7 @@ begin
 		leerpos(fich, pt.pos, ok);
 	end;
 end;
+
 procedure leercmdrect(var fich: text; var rect: TipoCmdRect; var ok: boolean);
 begin
 	leercar(fich, rect.car, ok);
@@ -163,6 +171,7 @@ begin
 		leerpos(fich, rect.se, ok);
 	end;
 end;
+//Contendrá el carácter y las posiciones leídas si todas las lecturas fueron exitosas.
 
 procedure leercmd(var fich: text; var cmd: TipoCmd; var ok: boolean);
 begin
@@ -176,6 +185,7 @@ begin
 		end;
 	end;
 end;
+//Contendrá el tipo de instrucción y los datos asociados si todo se leyó correctamente.
 
 procedure escrpos(pos: TipoPos);
 begin
