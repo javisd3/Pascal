@@ -1,11 +1,3 @@
-Submarino
-Horizontal
-B
-2
-             affs   Fragata
-        Vertical
-C
-3   zsf
+Submarino Horizontal B 2
+Fragata     sfsf   Vertical     sf C 3
 FIN
-2 2
-3 4
