@@ -153,7 +153,7 @@ begin
 end;
 
 procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
-begin
+begin // si esto no esta bien error en la entrada
   leerNombre(fich, barco.nombre, ok);
   if ok then begin
     leerorientacion(fich, barco.orientacion, ok);
@@ -162,7 +162,7 @@ begin
     end;
   end;
 end;
-
+//funcion dispara barco similar a la de arriba
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
 var
   procolumna: integer;
