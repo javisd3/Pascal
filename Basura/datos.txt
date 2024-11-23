@@ -3,4 +3,5 @@ Dragaminas Vertical 3 3  dgdg
 Fragata Horizontal 2 5 gdgd
 Portaaviones Horizontal 4 2
 FIN
-4 6 5 3
+4 6 
+5 3 
