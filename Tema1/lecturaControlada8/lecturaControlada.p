@@ -1,5 +1,7 @@
 program practfigs;
-
+//primera coordenada tiene que ser letra
+//error de entrada
+// disapros
 const
   numFilas = 10;
   numColumnas = 10;
@@ -226,7 +228,7 @@ begin
 
   while not eof(fich) do
   begin
-    leerpal(fich, entrada);  // Leer la palabra (si es FIN, termina)
+    leerpal(fich, entrada);  
     if entrada <> 'FIN' then
     begin
       leerbarco(fich, barco, ok);
