@@ -9,6 +9,7 @@ const
 
 type
   TipoPal = string;
+  TipoEntrada = (FIN);  
   TipoNombre = (Submarino, Dragaminas, Fragata, Portaaviones);
   TipoOrientacion = (Horizontal, Vertical);
 
@@ -17,92 +18,115 @@ type
     fila: integer;
   end;
 
+  TipoDisparo = record
+    columna: integer;
+    fila: integer;
+  end;
+
   TipoBarco = record
     nombre: TipoNombre;
     proa: TipoCasilla;
     orientacion: TipoOrientacion;
+    caracter: char;
   end;
 
   TipoBarcos = array[1..MaxBarcos] of TipoBarco;
 
 function esblanco(c: char): boolean;
 begin
-  esblanco := (c = Esp) or (c = Tab[1]);
+  esblanco := (c = Esp) or (c = Tab);  
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
+var
+  n: integer;
 begin
-  pal := pal + c;
+  n := length(pal);
+  n := n + 1;
+  setlength(pal, n);
+  pal[n] := c;
 end;
 
 procedure leerpal(var fich: text; var pal: TipoPal);
 var
   c: char;
+  haypal: boolean;
 begin
+  haypal := False;
   pal := '';
-  while not eof(fich) do
-  begin
-    read(fich, c);
-    if not esblanco(c) then
-    begin
-      addcar(pal, c);
+  while not eof(fich) and not haypal do begin
+    if eoln(fich) then begin
+      readln(fich);
     end
-    else if pal <> '' then
-      exit;
+    else begin
+      read(fich, c);
+      haypal := not esblanco(c);
+      if haypal then begin
+        addcar(pal, c);
+      end;
+    end;
+  end;
+  while haypal and not eof(fich) and not eoln(fich) do begin
+    read(fich, c);
+    haypal := not esblanco(c);
+    if haypal then begin
+      addcar(pal, c);
+    end;
   end;
 end;
 
 procedure leernombre(var fich: text; var nombre: TipoNombre; var ok: boolean);
 var
   pal: TipoPal;
+  pos: integer;
 begin
   leerpal(fich, pal);
-  case pal of
-    'Submarino': nombre := Submarino;
-    'Dragaminas': nombre := Dragaminas;
-    'Fragata': nombre := Fragata;
-    'Portaaviones': nombre := Portaaviones;
-  else
-    ok := false;
-    exit;
-  end;
-  ok := true;
+  val(pal, nombre, pos);
+  ok := pos = 0;
 end;
 
 procedure leerorientacion(var fich: text; var orientacion: TipoOrientacion; var ok: boolean);
 var
   pal: TipoPal;
+  pos: integer;
 begin
   leerpal(fich, pal);
-  if pal = 'Horizontal' then
-    orientacion := Horizontal
-  else if pal = 'Vertical' then
-    orientacion := Vertical
-  else
-    ok := false;
-  ok := true;
+  val(pal, orientacion, pos);
+  ok := pos = 0;
 end;
 
-procedure leerproa(var fich: text; var casilla: TipoCasilla; var ok: boolean);
+procedure leercolumna(var fich: text; var x: integer; var ok: boolean);
 var
-  columna: char;
-  fila: integer;
+  pal: TipoPal;
+  pos: integer;
 begin
-  leerpal(fich, columna);
-  leerpal(fich, fila);
-  casilla.columna := ord(columna) - ord('A') + 1;
-  casilla.fila := fila;
-  ok := (casilla.columna >= 1) and (casilla.columna <= numColumnas) and
-        (casilla.fila >= 1) and (casilla.fila <= numFilas);
+  leerpal(fich, pal);
+  val(pal, x, pos);
+  ok := pos = 0;
 end;
 
-procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
+procedure leerfila(var fich: text; var f: integer; var ok: boolean);
+var
+  pal: TipoPal;
+  pos: integer;
 begin
-  leernombre(fich, barco.nombre, ok);
-  if not ok then exit;
-  leerproa(fich, barco.proa, ok);
-  if not ok then exit;
-  leerorientacion(fich, barco.orientacion, ok);
+  leerpal(fich, pal);
+  val(pal, f, pos);
+  ok := pos = 0;
+end;
+
+procedure leerproa(var fich: text; var barco: TipoBarco; var ok: boolean);
+begin
+  leercolumna(fich, barco.proa.columna, ok);
+  if ok then begin
+    leerfila(fich, barco.proa.fila, ok);
+  end;
+end;
+
+function letraANumero(letra: char): integer;
+begin
+  if (letra >= 'A') and (letra <= 'Z') then
+    letraANumero := ord(letra) - ord('A') + 1
 end;
 
 function longitudbarco(barco: TipoBarco): integer;
@@ -125,30 +149,42 @@ begin
   end;
 end;
 
+procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
+begin
+  leerNombre(fich, barco.nombre, ok);
+  if ok then begin
+    leerproa(fich, barco, ok);
+    if ok then begin
+      leerorientacion(fich, barco.orientacion, ok);
+    end;
+  end;
+end;
+
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
 var
-  finalColumna, finalFila: integer;
+  procolumna: integer;
+  proafila: integer;
 begin
   if barco.orientacion = Horizontal then
   begin
-    finalColumna := barco.proa.columna + longitudbarco(barco) - 1;
-    ubicacionBarco := (casilla.fila = barco.proa.fila) and
-                      (casilla.columna >= barco.proa.columna) and
-                      (casilla.columna <= finalColumna);
+    procolumna := barco.proa.columna + longitudbarco(barco) - 1;
+    ubicacionBarco :=   (casilla.fila = barco.proa.fila) and
+                        (casilla.columna >= barco.proa.columna) and
+                        (casilla.columna <= procolumna);
   end
   else
   begin
-    finalFila := barco.proa.fila + longitudbarco(barco) - 1;
-    ubicacionBarco := (casilla.columna = barco.proa.columna) and
-                      (casilla.fila >= barco.proa.fila) and
-                      (casilla.fila <= finalFila);
+    proafila := barco.proa.fila + longitudbarco(barco) - 1;
+    ubicacionBarco :=   (casilla.columna = barco.proa.columna) and
+                        (casilla.fila >= barco.proa.fila) and
+                        (casilla.fila <= proafila);
   end;
 end;
 
 procedure dibujartablero(Barcos: TipoBarcos; numBarcos: integer);
 var
-  fila, columna, i: integer;
   casilla: TipoCasilla;
+  i, fila, columna: integer;
   hayBarco: boolean;
 begin
   for fila := 1 to numFilas do
@@ -158,17 +194,18 @@ begin
       casilla.columna := columna;
       casilla.fila := fila;
       hayBarco := false;
+
       for i := 1 to numBarcos do
       begin
         if ubicacionBarco(Barcos[i], casilla) then
         begin
-          write(InicialDelBarco(Barcos[i]), ' ');
           hayBarco := true;
-          break;
+          write(InicialDelBarco(Barcos[i]), ' ');
         end;
       end;
+
       if not hayBarco then
-        write('. ');
+        write('.', ' ');
     end;
     writeln;
   end;
@@ -196,5 +233,6 @@ begin
   end;
 
   close(fich);
+
   dibujartablero(Barcos, numBarcos);
 end.

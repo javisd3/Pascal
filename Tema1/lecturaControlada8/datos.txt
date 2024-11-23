@@ -1,3 +1,5 @@
-Submarino Horizontal B 2
-Fragata     sfsf   Vertical     sf C 3
+Submarino A1 Horizontal
+Dragaminas B3 Vertical
+Fragata  af f C5    afasf   Horizontal
+Portaaviones asf  E2  Horizontal
 FIN
