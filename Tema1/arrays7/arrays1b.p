@@ -52,7 +52,7 @@ begin
   begin
     hayBarco := true;
     barco.nombre := entrada;
-
+              
     readln(barco.orientacion);
 
     readln(proaChr);
