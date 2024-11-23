@@ -1,7 +1,10 @@
+svsv
 Submarino Horizontal 3   1  dfffdf
 Dragaminas  Vertical 3 3 
 afasf 
+Fragata   Horizontal 2 5   ssfs
+Portaaviones  Horizontal 4 2  
 FIN
-Fragata   Horizontal 2 5     
-Portaaviones asf  E2  Horizontal
+  
+
 
