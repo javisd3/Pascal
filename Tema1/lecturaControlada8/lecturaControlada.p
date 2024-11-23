@@ -218,6 +218,7 @@ var
   numBarcos: integer;
   barco: TipoBarco;
   ok: boolean;
+  entrada: string;
 begin
   assign(fich, 'datos.txt');
   reset(fich);
@@ -225,11 +226,15 @@ begin
 
   while not eof(fich) do
   begin
-    leerbarco(fich, barco, ok);
-    if ok then
+    leerpal(fich, entrada);  // Leer la palabra (si es FIN, termina)
+    if entrada <> 'FIN' then
     begin
-      numBarcos := numBarcos + 1;
-      Barcos[numBarcos] := barco;
+      leerbarco(fich, barco, ok);
+      if ok then
+      begin
+        numBarcos := numBarcos + 1;
+        Barcos[numBarcos] := barco;
+      end;
     end;
   end;
 
