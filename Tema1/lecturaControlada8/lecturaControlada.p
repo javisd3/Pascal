@@ -99,6 +99,7 @@ procedure leercolumna(var fich: text; var x: integer; var ok: boolean);
 var
   pal: TipoPal;
   pos: integer;
+  
 begin
   leerpal(fich, pal);
   val(pal, x, pos);
@@ -153,9 +154,9 @@ procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
 begin
   leerNombre(fich, barco.nombre, ok);
   if ok then begin
-    leerproa(fich, barco, ok);
+    leerorientacion(fich, barco.orientacion, ok);
     if ok then begin
-      leerorientacion(fich, barco.orientacion, ok);
+      leerproa(fich, barco, ok);
     end;
   end;
 end;
