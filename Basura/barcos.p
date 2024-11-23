@@ -1,7 +1,5 @@
 program practfigs;
-//primera coordenada tiene que ser letra
-//error de entrada
-// disapros
+
 const
   numFilas = 10;
   numColumnas = 10;
@@ -21,10 +19,7 @@ type
     fila: integer;
   end;
 
-  TipoDisparo = record
-    columna: integer;
-    fila: integer;
-  end;
+  TipoDisparo = TipoCasilla;
 
   TipoBarco = record
     nombre: TipoNombre;
@@ -103,7 +98,6 @@ procedure leercolumna(var fich: text; var x: integer; var ok: boolean);
 var
   pal: TipoPal;
   pos: integer;
-  
 begin
   leerpal(fich, pal);
   val(pal, x, pos);
@@ -131,7 +125,7 @@ end;
 function letraANumero(letra: char): integer;
 begin
   if (letra >= 'A') and (letra <= 'Z') then
-    letraANumero := ord(letra) - ord('A') + 1
+    letraANumero := ord(letra) - ord('A') + 1;
 end;
 
 function longitudbarco(barco: TipoBarco): integer;
@@ -155,37 +149,14 @@ begin
 end;
 
 procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
-var
-  nombreOk, orientacionOk, proaOk: boolean;
 begin
-  leernombre(fich, barco.nombre, nombreOk);
-  
-  if not nombreOk then
-  begin
-    writeln('Error de entrada');
-    ok := false;
-    exit;
+  leerNombre(fich, barco.nombre, ok);
+  if ok then begin
+    leerorientacion(fich, barco.orientacion, ok);
+    if ok then begin
+      leerproa(fich, barco, ok);
+    end;
   end;
-  
-  leerorientacion(fich, barco.orientacion, orientacionOk);
-  
-  if not orientacionOk then
-  begin
-    writeln('Error de entrada');
-    ok := false;
-    exit;
-  end;
-  
-  leerproa(fich, barco, proaOk);
-  
-  if not proaOk then
-  begin
-    writeln('Error de entrada');
-    ok := false;
-    exit;
-  end;
-  
-  ok := true;
 end;
 
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
@@ -239,37 +210,24 @@ begin
   end;
 end;
 
-procedure leerdisparo(var fich: text; var disparo: TipoDisparo; var ok: boolean);
-var
-  columnaOk, filaOk: boolean;
+procedure leerDisparo(var fich: text; var disparo: TipoDisparo; var ok: boolean);
 begin
-  leercolumna(fich, disparo.columna, columnaOk);
-  if not columnaOk then
-  begin
-    writeln('Error en la entrada');
-    ok := false;
-    exit;
+  leercolumna(fich, disparo.columna, ok);
+  if ok then begin
+    leerfila(fich, disparo.fila, ok);
   end;
-  
-  leerfila(fich, disparo.fila, filaOk);
-  if not filaOk then
-  begin
-    writeln('Error en la entrada');
-    ok := false;
-    exit;
-  end;
-  
-  ok := true;
 end;
 
-procedure realizarDisparo(disparo: TipoDisparo; numdisparos: integer; Barcos: TipoBarcos; numBarcos: integer);
+procedure realizarDisparo(disparo: TipoDisparo; Barcos: TipoBarcos; numBarcos: integer);
 var
   casilla: TipoCasilla;
   i: integer;
   tocado: boolean;
 begin
   tocado := false;
-  for i := 1 to numdisparos do
+  casilla := disparo;  // Inicializar casilla con las coordenadas del disparo
+  
+  for i := 1 to numBarcos do
   begin
     if ubicacionBarco(Barcos[i], casilla) then
     begin
@@ -278,6 +236,7 @@ begin
       exit;
     end;
   end;
+  
   if not tocado then
     writeln('Agua');
 end;
@@ -286,47 +245,57 @@ var
   fich: text;
   Barcos: TipoBarcos;
   numBarcos: integer;
+  disparos: TipoDisparos;
+  numDisparos: integer;
   barco: TipoBarco;
   disparo: TipoDisparo;
-  numdisparos: integer;
   ok: boolean;
-  entrada: string;
+  entrada: TipoPal;  // Declarar la variable 'entrada' de tipo TipoPal
+  i: integer; 
 begin
   assign(fich, 'datos.txt');
   reset(fich);
   numBarcos := 0;
-  numdisparos := 0;
+  numDisparos := 0;
 
+  // Leer barcos hasta encontrar "FIN"
   while not eof(fich) do
   begin
-    leerpal(fich, entrada);  
-    if entrada <> 'FIN' then
+    leerpal(fich, entrada);  // Inicializa la variable 'entrada'
+    if entrada = 'FIN' then
+      break;
+
+    leerBarco(fich, barco, ok);
+    if ok then
     begin
-      leerbarco(fich, barco, ok);
-      if ok then
-      begin
-        numBarcos := numBarcos + 1;
-        Barcos[numBarcos] := barco;
-      end;
-    end;
+      numBarcos := numBarcos + 1;
+      Barcos[numBarcos] := barco;
+    end
+    else
+      writeln('Error al leer un barco.');
   end;
 
+  // Leer disparos
   while not eof(fich) do
   begin
-    leerpal(fich, entrada);  
+    leerDisparo(fich, disparo, ok);
+    if ok then
     begin
-      leerdisparo(fich, disparo, ok);
-      if ok then
-      begin
-        numdisparos := numdisparos + 1;
-        disparo[numdisparos] := disparo;
-      end;
-    end;
+      numDisparos := numDisparos + 1;
+      disparos[numDisparos] := disparo;
+    end
+    else
+      writeln('Error al leer un disparo.');
   end;
-
 
   close(fich);
 
+  // Dibujar el tablero
   dibujartablero(Barcos, numBarcos);
-  dispararbarcos(disparos, numdisparos);
+
+  // Realizar disparos
+  for i := 1 to numDisparos do
+  begin
+    realizarDisparo(disparos[i], Barcos, numBarcos);
+  end;
 end.
