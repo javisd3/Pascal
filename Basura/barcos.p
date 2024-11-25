@@ -99,10 +99,34 @@ var
   pal: TipoPal;
   pos: integer;
 begin
+  // Leer la palabra o cadena desde el archivo
   leerpal(fich, pal);
-  val(pal, x, pos);
-  ok := pos = 0;
+
+  // Suponiendo que pal tiene una sola letra y debe convertirse a número
+  // Convertir la letra en su valor numérico (A=1, B=2, ..., Z=26)
+  val(pal, x, pos);  // Convertir la cadena 'pal' a un número
+
+  // Si la conversión falla (pos <> 0), tratamos con la letra
+  if pos <> 0 then
+  begin
+    if (length(pal) = 1) and (pal[1] in ['A'..'Z']) then
+    begin
+      // Convertir la letra a un número, A=1, B=2, etc.
+      x := ord(pal[1]) - ord('A') + 1;
+      ok := true;
+    end
+    else
+    begin
+      ok := false; // Si no es una letra válida
+    end;
+  end
+  else
+  begin
+    // Si la conversión fue exitosa, simplemente retornamos el valor de x
+    ok := true;
+  end;
 end;
+
 
 procedure leerfila(var fich: text; var f: integer; var ok: boolean);
 var
