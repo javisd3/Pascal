@@ -114,8 +114,6 @@ begin
   end;
 end;
 
-
-
 procedure leerfila(var fich: text; var f: integer; var ok: boolean);
 var
   pal: TipoPal;
@@ -132,12 +130,6 @@ begin
   if ok then begin
     leerfila(fich, barco.proa.fila, ok);
   end;
-end;
-
-function letraANumero(letra: char): integer;
-begin
-  if (letra >= 'A') and (letra <= 'Z') then
-    letraANumero := ord(letra) - ord('A') + 1;
 end;
 
 function longitudbarco(barco: TipoBarco): integer;
