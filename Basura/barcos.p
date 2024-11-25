@@ -225,7 +225,7 @@ var
   tocado: boolean;
 begin
   tocado := false;
-  casilla := disparo;  // Inicializar casilla con las coordenadas del disparo
+  casilla := disparo;  
   
   for i := 1 to numBarcos do
   begin
@@ -250,7 +250,7 @@ var
   barco: TipoBarco;
   disparo: TipoDisparo;
   ok: boolean;
-  entrada: TipoPal;  // Declarar la variable 'entrada' de tipo TipoPal
+  entrada: TipoPal;  
   i: integer; 
 begin
   assign(fich, 'datos.txt');
@@ -258,10 +258,9 @@ begin
   numBarcos := 0;
   numDisparos := 0;
 
-  // Leer barcos hasta encontrar "FIN"
   while not eof(fich) do
   begin
-    leerpal(fich, entrada);  // Inicializa la variable 'entrada'
+    leerpal(fich, entrada);  
     if entrada = 'FIN' then
       break;
 
@@ -276,7 +275,7 @@ begin
   end;
 
   // Leer disparos
-  while not eof(fich) do
+  while not eoln(fich) do
   begin
     leerDisparo(fich, disparo, ok);
     if ok then
@@ -290,10 +289,8 @@ begin
 
   close(fich);
 
-  // Dibujar el tablero
   dibujartablero(Barcos, numBarcos);
 
-  // Realizar disparos
   for i := 1 to numDisparos do
   begin
     realizarDisparo(disparos[i], Barcos, numBarcos);
