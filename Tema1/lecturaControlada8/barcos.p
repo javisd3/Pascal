@@ -274,7 +274,7 @@ begin
       writeln('Error al leer un barco.');
   end;
 
-  while not eof(fich) do
+  while not eoln(fich) do
   begin
     leerDisparo(fich, disparo, ok);
     if ok then
