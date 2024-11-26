@@ -10,8 +10,7 @@ const
 
 type
   TipoPal = string;
-  TipoEntrada = (FIN);  
-  TipoNombre = (Submarino, Dragaminas, Fragata, Portaaviones);
+  TipoNombre = (Submarino, Dragaminas, Fragata, Portaaviones, FIN);
   TipoOrientacion = (Horizontal, Vertical);
 
   TipoCasilla = record
@@ -254,7 +253,6 @@ var
   barco: TipoBarco;
   disparo: TipoDisparo;
   ok: boolean;
-  entrada: TipoPal;  
   i: integer; 
 begin
   assign(fich, 'datos.txt');
@@ -264,11 +262,9 @@ begin
 
   while not eof(fich) do
   begin
-    leerpal(fich, entrada);  
-    if entrada = 'FIN' then
+  leerBarco(fich, barco, ok);
+    if barco.nombre = FIN then
       break;
-
-    leerBarco(fich, barco, ok);
     if ok then
     begin
       numBarcos := numBarcos + 1;
@@ -278,8 +274,7 @@ begin
       writeln('Error al leer un barco.');
   end;
 
-  // Leer disparos
-  while not eoln(fich) do
+  while not eof(fich) do
   begin
     leerDisparo(fich, disparo, ok);
     if ok then

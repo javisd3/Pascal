@@ -1,8 +1,11 @@
-afsf Submarino Horizontal A 1   xgdg
-Dragaminas Vertical B 3  dgdg
-Fragata Horizontal D 5 gdgd
-Portaaviones Horizontal C 2 wfwf
+Submarino Horizontal A 1   
+Dragaminas Vertical B 3  
+Fragata Horizontal D 5 
+Portaaviones Horizontal C 2 
 Submarino Horizontal A 4
-FIN 4 6  5  4  3 4
+FIN A 6 A 1
+
+  
+ 
 
 
