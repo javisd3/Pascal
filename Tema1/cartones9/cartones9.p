@@ -24,7 +24,6 @@ var
   ListaCartones: array[1..MaxCartones] of TipoCarton;  
   numCartones: Integer;
   fich: TextFile;
-  carton: TipoCarton;
   ok: Boolean;
   i, j: Integer;
 
@@ -129,16 +128,29 @@ end;
 procedure ordenarCartones(var ListaCartones: array of TipoCarton; totalCartones: Integer);
 var
   i, j: Integer;
-  temp: TipoCarton;
+  carton: TipoCarton;
 begin
   for i := 0 to totalCartones - 2 do
     for j := i + 1 to totalCartones - 1 do
       if ListaCartones[i].Media < ListaCartones[j].Media then begin
-        // Intercambio de cartones
-        temp := ListaCartones[i];
+        carton := ListaCartones[i];
         ListaCartones[i] := ListaCartones[j];
-        ListaCartones[j] := temp;
+        ListaCartones[j] := carton;
       end;
+end;
+
+procedure escribirCarton(carton: TipoCarton);
+var
+  i, j: Integer;
+begin
+  for i := 1 to 3 do begin
+    write(carton.Filas[i].Color, ' ');
+    for j := 1 to 5 do begin
+      write(carton.Filas[i].Numeros[j], ' ');
+    end;
+    writeln;
+  end;
+  writeln;
 end;
 
 begin
@@ -155,12 +167,10 @@ begin
   end;
   close(fich);
 
-  // Ordenar los cartones por media
   ordenarCartones(ListaCartones, numCartones);
 
-  // Mostrar cartones ordenados
   for i := 1 to numCartones do
   begin
-    writeln('Cartón ', i, ': Media = ', ListaCartones[i].Media:0:2);
+    escribirCarton(ListaCartones[i]);
   end;
 end.
