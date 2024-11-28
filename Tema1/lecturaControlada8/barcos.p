@@ -124,7 +124,7 @@ begin
 end;
 
 procedure leerproa(var fich: text; var barco: TipoBarco; var ok: boolean);
-begin
+begin      
   leercolumna(fich, barco.proa.columna, ok);
   if ok then begin
     leerfila(fich, barco.proa.fila, ok);
@@ -244,25 +244,15 @@ begin
     writeln('Agua');
 end;
 
+procedure leerBarcos(var fich: text; var Barcos: TipoBarcos; var numBarcos: integer);
 var
-  fich: text;
-  Barcos: TipoBarcos;
-  numBarcos: integer;
-  disparos: TipoDisparos;
-  numDisparos: integer;
   barco: TipoBarco;
-  disparo: TipoDisparo;
   ok: boolean;
-  i: integer; 
 begin
-  assign(fich, 'datos.txt');
-  reset(fich);
   numBarcos := 0;
-  numDisparos := 0;
-
   while not eof(fich) do
   begin
-  leerBarco(fich, barco, ok);
+    leerBarco(fich, barco, ok);
     if barco.nombre = FIN then
       break;
     if ok then
@@ -273,8 +263,15 @@ begin
     else
       writeln('Error al leer un barco.');
   end;
+end;
 
-  while not eoln(fich) do
+procedure leerDisparos(var fich: text; var disparos: TipoDisparos; var numDisparos: integer);
+var
+  disparo: TipoDisparo;
+  ok: boolean;
+begin
+  numDisparos := 0;
+  while not eof(fich) and not eoln(fich) do
   begin
     leerDisparo(fich, disparo, ok);
     if ok then
@@ -285,6 +282,20 @@ begin
     else
       writeln('Error al leer un disparo.');
   end;
+end;
+
+var
+  fich: text;                    
+  Barcos: TipoBarcos;                 
+  disparos: TipoDisparos;           
+  numBarcos, numDisparos, i: integer;
+
+begin
+  assign(fich, 'datos.txt');
+  reset(fich);
+
+  leerBarcos(fich, Barcos, numBarcos);
+  leerDisparos(fich, disparos, numDisparos);
 
   close(fich);
 
