@@ -157,8 +157,7 @@ begin
   assign(fich, 'datos.txt');
   reset(fich);
   numCartones := 0;
-
-  // Leer cartones
+  
   while not eof(fich) and (numCartones < MaxCartones) do
   begin
     leerCarton(fich, ListaCartones[numCartones + 1], ok);

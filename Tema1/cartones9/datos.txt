@@ -1,4 +1,4 @@
-rojo 3 2 10 12 8
+rojo 3 2 10 12 
 verde 32 10 50 12 32
 amarillo 3 4 5 2 9
 
