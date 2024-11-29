@@ -43,13 +43,8 @@ begin
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
-var
-  n: integer;
 begin
-  n := length(pal);
-  n := n + 1;
-  setlength(pal, n);
-  pal[n] := c;
+  pal := pal + c;
 end;
 
 procedure leerpal(var fich: text; var pal: TipoPal);
@@ -60,23 +55,21 @@ begin
   haypal := False;
   pal := '';
   while not eof(fich) and not haypal do begin
-    if eoln(fich) then begin
-      readln(fich);
-    end
+    if eoln(fich) then
+      readln(fich)
     else begin
       read(fich, c);
       haypal := not espacios(c);
-      if haypal then begin
+      if haypal then
         addcar(pal, c);
-      end;
     end;
   end;
   while haypal and not eof(fich) and not eoln(fich) do begin
     read(fich, c);
-    haypal := not espacios(c);
-    if haypal then begin
-      addcar(pal, c);
-    end;
+    if not espacios(c) then
+      addcar(pal, c)
+    else
+      break;
   end;
 end;
 
@@ -114,9 +107,8 @@ begin
       c := ord(pal[1]) - ord('A') + 1;
       ok := true;
     end
-    else begin
-      ok := false; 
-    end;
+    else
+      ok := false;
   end;
 end;
 
@@ -133,9 +125,8 @@ end;
 procedure leerproa(var fich: text; var barco: TipoBarco; var ok: boolean);
 begin      
   leercolumna(fich, barco.proa.columna, ok);
-  if ok then begin
+  if ok then
     leerfila(fich, barco.proa.fila, ok);
-  end;
 end;
 
 function longitudbarco(barco: TipoBarco): integer;
@@ -160,34 +151,25 @@ end;
 
 procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
 begin
-  leerNombre(fich, barco.nombre, ok);
-  if ok then begin
+  leernombre(fich, barco.nombre, ok);
+  if ok then
+  begin
     leerorientacion(fich, barco.orientacion, ok);
-    if ok then begin
+    if ok then
       leerproa(fich, barco, ok);
-    end;
   end;
 end;
 
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
-var
-  procolumna: integer;
-  proafila: integer;
 begin
   if barco.orientacion = Horizontal then
-  begin
-    procolumna := barco.proa.columna + longitudbarco(barco) - 1;
-    ubicacionBarco :=   (casilla.fila = barco.proa.fila) and
-                        (casilla.columna >= barco.proa.columna) and
-                        (casilla.columna <= procolumna);
-  end
+    ubicacionBarco := (casilla.fila = barco.proa.fila) and
+                      (casilla.columna >= barco.proa.columna) and
+                      (casilla.columna <= barco.proa.columna + longitudbarco(barco) - 1)
   else
-  begin
-    proafila := barco.proa.fila + longitudbarco(barco) - 1;
-    ubicacionBarco :=   (casilla.columna = barco.proa.columna) and
-                        (casilla.fila >= barco.proa.fila) and
-                        (casilla.fila <= proafila);
-  end;
+    ubicacionBarco := (casilla.columna = barco.proa.columna) and
+                      (casilla.fila >= barco.proa.fila) and
+                      (casilla.fila <= barco.proa.fila + longitudbarco(barco) - 1);
 end;
 
 procedure dibujartablero(Barcos: TipoBarcos; numBarcos: integer);
@@ -203,16 +185,13 @@ begin
       casilla.columna := columna;
       casilla.fila := fila;
       hayBarco := false;
-
       for i := 1 to numBarcos do
-      begin
         if ubicacionBarco(Barcos[i], casilla) then
         begin
           hayBarco := true;
           write(InicialDelBarco(Barcos[i]), ' ');
+          break;
         end;
-      end;
-
       if not hayBarco then
         write('.', ' ');
     end;
@@ -223,45 +202,40 @@ end;
 procedure leerDisparo(var fich: text; var disparo: TipoDisparo; var ok: boolean);
 begin
   leercolumna(fich, disparo.columna, ok);
-  if ok then begin
+  if ok then
     leerfila(fich, disparo.fila, ok);
-  end;
 end;
 
 procedure realizarDisparo(disparo: TipoDisparo; Barcos: TipoBarcos; numBarcos: integer);
 var
   casilla: TipoCasilla;
   i: integer;
-  tocado: boolean;
 begin
-  tocado := false;
-  casilla := disparo;  
-  
+  casilla := disparo;
   for i := 1 to numBarcos do
-  begin
     if ubicacionBarco(Barcos[i], casilla) then
     begin
-      tocado := true;
       writeln('Tocado');
       exit;
     end;
-  end;
-  
-  if not tocado then
-    writeln('Agua');
+  writeln('Agua');
 end;
 
-procedure leerBarcos(var fich: text; var Barcos: TipoBarcos; var numBarcos: integer);
+procedure leerBarcos(var fich: text; var Barcos: TipoBarcos; var numBarcos: integer; var llegoFin: boolean);
 var
   barco: TipoBarco;
   ok: boolean;
 begin
   numBarcos := 0;
+  llegoFin := false;
   while not eof(fich) do
   begin
-    leerBarco(fich, barco, ok);
+    leerbarco(fich, barco, ok);
     if barco.nombre = FIN then
+    begin
+      llegoFin := true;
       break;
+    end;
     if ok then
     begin
       numBarcos := numBarcos + 1;
@@ -272,17 +246,19 @@ begin
   end;
 end;
 
-procedure leerDisparos(var fich: text; var disparos: TipoDisparos; var numDisparos: integer);
+procedure leerDisparos(var fich: text; var disparos: TipoDisparos; var numDisparos: integer; var hayDisparos: boolean);
 var
   disparo: TipoDisparo;
   ok: boolean;
 begin
   numDisparos := 0;
-  while not eof(fich) and not eoln(fich) do
+  hayDisparos := false;
+  while not eof(fich) do
   begin
     leerDisparo(fich, disparo, ok);
     if ok then
     begin
+      hayDisparos := true;
       numDisparos := numDisparos + 1;
       disparos[numDisparos] := disparo;
     end
@@ -292,18 +268,24 @@ begin
 end;
 
 var
-  fich: text;                    
-  Barcos: TipoBarcos;                 
-  disparos: TipoDisparos;           
+  fich: text;
+  Barcos: TipoBarcos;
+  disparos: TipoDisparos;
   numBarcos, numDisparos, i: integer;
+  llegoFin, hayDisparos: boolean;
 
 begin
   assign(fich, 'datos.txt');
   reset(fich);
 
-  leerBarcos(fich, Barcos, numBarcos);
-  leerDisparos(fich, disparos, numDisparos);
+  leerBarcos(fich, Barcos, numBarcos, llegoFin);
 
+  if not llegoFin then
+    exit; 
+  leerDisparos(fich, disparos, numDisparos, hayDisparos);
+
+  if not hayDisparos then
+    exit; 
   close(fich);
 
   dibujartablero(Barcos, numBarcos);
@@ -313,3 +295,4 @@ begin
     realizarDisparo(disparos[i], Barcos, numBarcos);
   end;
 end.
+
