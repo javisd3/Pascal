@@ -8,7 +8,7 @@ const
 
 type
   TipoPal = string;
-  TipoColor = (Rojo, Verde, Azul, Amarillo);
+  TipoColor = (rojo, verde, azul, amarillo);
   TipoNumero = 1..100;  
   TipoFila = record
     Color: TipoColor;
@@ -108,22 +108,22 @@ procedure leerCarton(var fich: text; var carton: TipoCarton; var ok: boolean);
 var
   i: Integer;
 begin
+  ok := True;
   for i := 1 to 3 do begin
     leerfila(fich, carton.Filas[i], ok);
-    if not ok then
+    if not ok then begin
+      while not eoln(fich) do readln(fich);
       break;
+    end;
   end;
 
-  if ok then begin
-    carton.Media := 0;
-    for i := 1 to 3 do begin
-      for j := 1 to 5 do begin
-        carton.Media := carton.Media + carton.Filas[i].Numeros[j];
-      end;
-    end;
-    carton.Media := carton.Media / 15;  
-  end;
+  carton.Media := 0;
+  for i := 1 to 3 do
+    for j := 1 to 5 do
+      carton.Media := carton.Media + carton.Filas[i].Numeros[j];
+  carton.Media := carton.Media / 15;
 end;
+
 
 procedure ordenarCartones(var ListaCartones: array of TipoCarton; totalCartones: Integer);
 var
