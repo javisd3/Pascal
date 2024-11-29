@@ -1,4 +1,11 @@
-program practfigs;
+{$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
+
+{
+Alumno: Javier San Martín Hurtado
+1ºCurso 1ºCuatrimestre
+}
+
+program lecturaControlada;
 
 const
   numFilas = 10;
@@ -30,9 +37,9 @@ type
   TipoBarcos = array[1..MaxBarcos] of TipoBarco;
   TipoDisparos = array[1..MaxDisparos] of TipoDisparo;
 
-function esblanco(c: char): boolean;
+function espacios(c: char): boolean;
 begin
-  esblanco := (c = Esp) or (c = Tab);  
+  espacios := (c = Esp) or (c = Tab);  
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
@@ -58,7 +65,7 @@ begin
     end
     else begin
       read(fich, c);
-      haypal := not esblanco(c);
+      haypal := not espacios(c);
       if haypal then begin
         addcar(pal, c);
       end;
@@ -66,7 +73,7 @@ begin
   end;
   while haypal and not eof(fich) and not eoln(fich) do begin
     read(fich, c);
-    haypal := not esblanco(c);
+    haypal := not espacios(c);
     if haypal then begin
       addcar(pal, c);
     end;
