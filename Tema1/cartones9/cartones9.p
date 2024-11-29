@@ -26,9 +26,9 @@ var
   ok: Boolean;
   i, j: Integer;
 
-function esblanco(c: char): boolean;
+function espacios(c: char): boolean;
 begin
-  esblanco := (c = Esp) or (c = Tab);  
+  espacios := (c = Esp) or (c = Tab);  
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
@@ -54,7 +54,7 @@ begin
     end
     else begin
       read(fich, c);
-      haypal := not esblanco(c);
+      haypal := not espacios(c);
       if haypal then begin
         addcar(pal, c);
       end;
@@ -62,7 +62,7 @@ begin
   end;
   while haypal and not eof(fich) and not eoln(fich) do begin
     read(fich, c);
-    haypal := not esblanco(c);
+    haypal := not espacios(c);
     if haypal then begin
       addcar(pal, c);
     end;
