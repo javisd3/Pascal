@@ -1,4 +1,3 @@
-//leer, calcular media, ordenar y escribir
 program cartones;
 
 const
@@ -104,6 +103,19 @@ begin
   end;
 end;
 
+procedure calcularMedia(var carton: TipoCarton);
+var
+  i, j: Integer;
+  sumaTotal: Real;
+begin
+  sumaTotal := 0;
+  for i := 1 to 3 do
+    for j := 1 to 5 do
+      sumaTotal := sumaTotal + carton.Filas[i].Numeros[j];
+  
+  carton.Media := sumaTotal / 15;
+end;
+
 procedure leerCarton(var fich: text; var carton: TipoCarton; var ok: boolean);
 var
   i: Integer;
@@ -112,18 +124,14 @@ begin
   for i := 1 to 3 do begin
     leerfila(fich, carton.Filas[i], ok);
     if not ok then begin
-      while not eoln(fich) do readln(fich);
+      while not eoln(fich) do readln(fich); // Salta la línea incorrecta
       break;
     end;
   end;
 
-  carton.Media := 0;
-  for i := 1 to 3 do
-    for j := 1 to 5 do
-      carton.Media := carton.Media + carton.Filas[i].Numeros[j];
-  carton.Media := carton.Media / 15;
+  if ok then
+    calcularMedia(carton); 
 end;
-
 
 procedure ordenarCartones(var ListaCartones: array of TipoCarton; totalCartones: Integer);
 var
