@@ -124,7 +124,7 @@ begin
   for i := 1 to 3 do begin
     leerfila(fich, carton.Filas[i], ok);
     if not ok then begin
-      while not eoln(fich) do readln(fich); // Salta la línea incorrecta
+      while not eoln(fich) do readln(fich); 
       break;
     end;
   end;
