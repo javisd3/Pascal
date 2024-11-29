@@ -281,11 +281,11 @@ begin
   leerBarcos(fich, Barcos, numBarcos, llegoFin);
 
   if not llegoFin then
-    exit; 
+    read(); 
   leerDisparos(fich, disparos, numDisparos, hayDisparos);
 
   if not hayDisparos then
-    exit; 
+    read();
   close(fich);
 
   dibujartablero(Barcos, numBarcos);
