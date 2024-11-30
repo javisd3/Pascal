@@ -1,3 +1,10 @@
+{$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
+
+{
+Alumno: Javier San Martín Hurtado
+1ºCurso 1ºCuatrimestre
+}
+
 program lecturaControlada;
 
 const

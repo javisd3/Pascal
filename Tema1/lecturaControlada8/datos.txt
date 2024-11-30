@@ -3,7 +3,7 @@ Dragaminas Vertical B 3
 Fragata Horizontal D 5 
 Portaaviones Horizontal C 2 
 Submarino Horizontal A 4
-FIN  B 4
+FIN x B 4
 
   
  
