@@ -1,4 +1,3 @@
-{$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
 
 {
 Alumno: Javier San Martín Hurtado
@@ -31,7 +30,7 @@ var
   numCartones: Integer;
   fich: TextFile;
   ok: Boolean;
-  i, j: Integer;
+  i: Integer;
 
 function espacios(c: char): boolean;
 begin
