@@ -204,7 +204,6 @@ end;
 
 procedure leerDisparo(var fich: text; var disparo: TipoDisparo; var ok: boolean);
 begin
-  ok := False;
   leercolumna(fich, disparo.columna, ok);
   if ok then
     leerfila(fich, disparo.fila, ok);
