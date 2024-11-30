@@ -1,10 +1,3 @@
-{$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
-
-{
-Alumno: Javier San Martín Hurtado
-1ºCurso 1ºCuatrimestre
-}
-
 program lecturaControlada;
 
 const
@@ -43,8 +36,13 @@ begin
 end;
 
 procedure addcar(var pal: TipoPal; c: char);
+var
+  n: Integer;
 begin
-  pal := pal + c;
+  n := length(pal);
+  n := n + 1;
+  setlength(pal, n);
+  pal[n] := c;
 end;
 
 procedure leerpal(var fich: text; var pal: TipoPal);
@@ -55,21 +53,23 @@ begin
   haypal := False;
   pal := '';
   while not eof(fich) and not haypal do begin
-    if eoln(fich) then
-      readln(fich)
+    if eoln(fich) then begin
+      readln(fich);
+    end
     else begin
       read(fich, c);
       haypal := not espacios(c);
-      if haypal then
+      if haypal then begin
         addcar(pal, c);
+      end;
     end;
   end;
   while haypal and not eof(fich) and not eoln(fich) do begin
     read(fich, c);
-    if not espacios(c) then
-      addcar(pal, c)
-    else
-      break;
+    haypal := not espacios(c);
+    if haypal then begin
+      addcar(pal, c);
+    end;
   end;
 end;
 
@@ -93,6 +93,17 @@ begin
   ok := pos = 0;
 end;
 
+procedure letraANumero(pal: string; var c: integer; var ok: boolean);
+begin
+  if (length(pal) = 1) and (pal[1] in ['A'..'J']) then
+  begin
+    c := ord(pal[1]) - ord('A') + 1;
+    ok := true;
+  end
+  else
+    ok := false;
+end;
+
 procedure leercolumna(var fich: text; var c: integer; var ok: boolean);
 var
   pal: TipoPal;
@@ -101,15 +112,7 @@ begin
   leerpal(fich, pal);
   val(pal, c, pos);  
   if pos <> 0 then
-  begin
-    if (length(pal) = 1) and (pal[1] in ['A'..'J']) then
-    begin
-      c := ord(pal[1]) - ord('A') + 1;
-      ok := true;
-    end
-    else
-      ok := false;
-  end;
+    letraANumero(pal, c, ok)
 end;
 
 procedure leerfila(var fich: text; var f: integer; var ok: boolean);
@@ -201,6 +204,7 @@ end;
 
 procedure leerDisparo(var fich: text; var disparo: TipoDisparo; var ok: boolean);
 begin
+  ok := False;
   leercolumna(fich, disparo.columna, ok);
   if ok then
     leerfila(fich, disparo.fila, ok);
@@ -210,15 +214,18 @@ procedure realizarDisparo(disparo: TipoDisparo; Barcos: TipoBarcos; numBarcos: i
 var
   casilla: TipoCasilla;
   i: integer;
+  tocado: boolean;
 begin
+  tocado := False;
   casilla := disparo;
   for i := 1 to numBarcos do
     if ubicacionBarco(Barcos[i], casilla) then
     begin
+      tocado := True;
       writeln('Tocado');
-      exit;
     end;
-  writeln('Agua');
+  if not tocado then 
+    writeln('Agua');
 end;
 
 procedure leerBarcos(var fich: text; var Barcos: TipoBarcos; var numBarcos: integer; var llegoFin: boolean);
@@ -272,27 +279,25 @@ var
   Barcos: TipoBarcos;
   disparos: TipoDisparos;
   numBarcos, numDisparos, i: integer;
-  llegoFin, hayDisparos: boolean;
+  llegoFin, hayDisparos, puedeContinuar: boolean;
 
 begin
   assign(fich, 'datos.txt');
   reset(fich);
 
   leerBarcos(fich, Barcos, numBarcos, llegoFin);
+  puedeContinuar := llegoFin;
 
-  if not llegoFin then
-    exit; 
-  leerDisparos(fich, disparos, numDisparos, hayDisparos);
+  if puedeContinuar then
+  begin
+    leerDisparos(fich, disparos, numDisparos, hayDisparos);
+  end;
 
-  if not hayDisparos then
-    exit;
   close(fich);
 
-  dibujartablero(Barcos, numBarcos);
-
-  for i := 1 to numDisparos do
   begin
-    realizarDisparo(disparos[i], Barcos, numBarcos);
+    dibujartablero(Barcos, numBarcos);
+    for i := 1 to numDisparos do
+      realizarDisparo(disparos[i], Barcos, numBarcos);
   end;
 end.
-
