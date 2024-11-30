@@ -261,10 +261,7 @@ begin
 	end;
 end;
 
-procedure formaparte(flota: TipoFlota; 
-					 casilla: TipoCasilla; 
-					 var encontrado: boolean;
-					 var barco: TipoBarco);
+procedure formaparte(flota: TipoFlota; casilla: TipoCasilla; var encontrado: boolean; var barco: TipoBarco);
 var
 	i: integer;
 begin
