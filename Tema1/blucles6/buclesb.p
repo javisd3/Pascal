@@ -25,7 +25,6 @@ var
     figuraMenorAltura: TfiguraR;
     primeraFigura: boolean;
 
-// Procedimientos para dibujar figuras
 procedure DibujarCuadrado(altura: integer; caracter: char);
 var
     i, j: integer;
