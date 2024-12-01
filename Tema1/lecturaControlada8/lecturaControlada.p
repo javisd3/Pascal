@@ -109,7 +109,10 @@ begin
     ok := true;
   end
   else
+  begin
     ok := false;
+    writeln('Error al leer un barco.');
+  end;
 end;
 
 procedure leercolumna(var fich: text; var c: integer; var ok: boolean);
