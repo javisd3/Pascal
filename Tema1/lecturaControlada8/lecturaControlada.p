@@ -1,10 +1,3 @@
-{$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
-
-{
-Alumno: Javier San Martín Hurtado
-1ºCurso 1ºCuatrimestre
-}
-
 program lecturaControlada;
 
 const
@@ -162,12 +155,14 @@ end;
 procedure leerbarco(var fich: text; var barco: TipoBarco; var ok: boolean);
 begin
   leernombre(fich, barco.nombre, ok);
-  if ok then
+  if ok and (barco.nombre <> FIN) then
   begin
     leerorientacion(fich, barco.orientacion, ok);
     if ok then
       leerproa(fich, barco, ok);
-  end;
+  end
+  else
+    ok := false;
 end;
 
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
