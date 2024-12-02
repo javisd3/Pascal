@@ -22,7 +22,7 @@ type
 
   TipoCarton = record
     Filas: array[1..3] of TipoFila;
-    Media: Real;
+    Media: Integer;
   end;
 
 var
@@ -85,14 +85,17 @@ begin
   ok := pos = 0;
 end;
 
-procedure leernumero(var fich: text; var numero: TipoNumero; var ok: boolean);
+procedure leernumero(var fich: Text; var numero: TipoNumero; var ok: Boolean);
 var
   pal: TipoPal;
   pos: Integer;
+  num: Integer;
 begin
   leerpal(fich, pal);
-  val(pal, numero, pos);
-  ok := pos = 0;
+  Val(pal, num, pos);
+  ok := (pos = 0) and (num in [1..100]);
+  if ok then
+    numero := num;
 end;
 
 procedure leerfila(var fich: text; var fila: TipoFila; var ok: boolean);
@@ -112,14 +115,14 @@ end;
 procedure calcularMedia(var carton: TipoCarton);
 var
   i, j: Integer;
-  sumaTotal: Real;
+  sumaTotal: Integer;
 begin
   sumaTotal := 0;
   for i := 1 to 3 do
     for j := 1 to 5 do
       sumaTotal := sumaTotal + carton.Filas[i].Numeros[j];
   
-  carton.Media := sumaTotal / 15;
+  carton.Media := sumaTotal div 15;
 end;
 
 procedure leerCarton(var fich: text; var carton: TipoCarton; var ok: boolean);
