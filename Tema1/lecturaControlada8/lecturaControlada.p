@@ -108,10 +108,8 @@ begin
     c := ord(pal[1]) - ord('A') + 1;
     ok := true;
   end
-  else
-  begin
-    ok := false;
-    writeln('Error al leer un barco.');
+    else if not ok then begin
+			writeln('Error al leer un barco');
   end;
 end;
 
@@ -260,14 +258,15 @@ begin
       numBarcos := numBarcos + 1;
       Barcos[numBarcos] := barco;
     end
-    else
-      writeln('Error al leer un barco');
+    else if not ok then begin
+			writeln('Error al leer un barco');
+		end;
   end;
 end;
 
 procedure leerDisparos(var fich: text; var disparos: TipoDisparos; var numDisparos: integer; var hayDisparos: boolean);
 var
-  disparo: TipoDisparo;
+  disparo: TipoDisparo; 
   ok: boolean;
 begin
   numDisparos := 0;
@@ -281,8 +280,9 @@ begin
       numDisparos := numDisparos + 1;
       disparos[numDisparos] := disparo;
     end
-    else
-      writeln('Error al leer un disparo');
+    else if not ok then begin
+			writeln('Error al leer un disparo');
+		end;
   end;
 end;
 
