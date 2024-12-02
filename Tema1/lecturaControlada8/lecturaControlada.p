@@ -261,7 +261,7 @@ begin
       Barcos[numBarcos] := barco;
     end
     else
-      writeln('Error al leer un barco.');
+      writeln('Error al leer un barco');
   end;
 end;
 
@@ -282,7 +282,7 @@ begin
       disparos[numDisparos] := disparo;
     end
     else
-      writeln('Error al leer un disparo.');
+      writeln('Error al leer un disparo');
   end;
 end;
 
