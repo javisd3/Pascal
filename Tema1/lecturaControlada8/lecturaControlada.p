@@ -259,7 +259,7 @@ begin
       Barcos[numBarcos] := barco;
     end
     else if not ok then begin
-			writeln('Error al leer un barco');
+      writeln('Error al leer un barco');
 		end;
   end;
 end;
