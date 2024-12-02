@@ -109,7 +109,7 @@ begin
     ok := true;
   end
     else if not ok then begin
-			writeln('Error al leer un barco');
+      writeln('Error al leer un barco');
   end;
 end;
 
@@ -260,7 +260,7 @@ begin
     end
     else if not ok then begin
       writeln('Error al leer un barco');
-		end;
+    end;
   end;
 end;
 
@@ -281,8 +281,8 @@ begin
       disparos[numDisparos] := disparo;
     end
     else if not ok then begin
-			writeln('Error al leer un disparo');
-		end;
+      writeln('Error al leer un disparo');
+    end;
   end;
 end;
 
