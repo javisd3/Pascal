@@ -10,26 +10,30 @@ const
   MaxCartones = 10;
   Esp: char = ' ';
   Tab: string = '   ';
+  FIN = 'FIN';
 
 type
   TipoPal = string;
   TipoColor = (rojo, verde, azul, amarillo);
   TipoNumero = 1..100;  
+  TipoJugador = array[1..3] of TipoCarton;  
+
   TipoFila = record
     Color: TipoColor;
     Numeros: array[1..5] of TipoNumero;
   end;
+
   TipoCarton = record
     Filas: array[1..3] of TipoFila;
   end;
-  TipoJugador = array[1..3] of TipoCarton;  
-
+  
 var
   ListaCartones: array[1..MaxCartones] of TipoCarton;  
   numCartones: Integer;
   fich: TextFile;
   ok: Boolean;
   i, j: Integer;
+  jugador: Integer; 
 
 function espacios(c: char): boolean;
 begin
@@ -121,6 +125,8 @@ begin
     if not ok then begin
       while not eoln(fich) do readln(fich); 
       break;
+    if pal = FIN then begin
+    jugador := jugador + 1
     end;
   end;
 end;
@@ -158,19 +164,22 @@ begin
   assign(fich, 'datos.txt');
   reset(fich);
   numCartones := 0;
+  jugador := 1; 
   
   while not eof(fich) and (numCartones < MaxCartones) do
   begin
     leerCarton(fich, ListaCartones[numCartones + 1], ok);
     if ok then
       numCartones := numCartones + 1;
+    end;
   end;
   close(fich);
 
-  for i := 1 to numCartones do
-  begin
-    for j := 1 to 3 do
-      ordenarNumeros(ListaCartones[i].Filas[j]);
-    escribirCarton(ListaCartones[i]);
+  for i := 1 to jugador do begin
+    writeln('Jugador ', i, ':');
+    for j := 1 to numCartones do
+    begin
+      escribirCarton(ListaCartones[j]);
+    end;
   end;
 end.
