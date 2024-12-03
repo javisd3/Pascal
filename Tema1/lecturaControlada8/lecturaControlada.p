@@ -170,8 +170,9 @@ begin
     if ok then
       leerproa(fich, barco, ok);
   end
-  else
+  else begin
     ok := false;
+  end;
 end;
 
 function ubicacionBarco(barco: TipoBarco; casilla: TipoCasilla): boolean;
