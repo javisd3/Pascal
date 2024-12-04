@@ -169,7 +169,11 @@ var
   fich: TextFile;
   ok: Boolean;
   i: Integer;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 30e2f1fff7711d5e9f98a1617efbfe8ae3287960
 begin
   assign(fich, 'datos.txt');
   reset(fich);
