@@ -62,32 +62,40 @@ end;
 
 procedure leerpalabra(var fich: text; var pal: TipoPal);
 var
-	haypalabra: boolean;
-	c: char;
+  haypalabra: boolean;
+  c: char;
 begin
-	haypalabra := false;
+  haypalabra := false;
+  borrar(pal);
 
-	borrar(pal);
-	while (not eof(fich)) and (not haypalabra) do begin
-		if eoln(fich) then begin
-			readln(fich);
-		end
-		else begin
-			read(fich, c);
-			haypalabra := not espacios(c);
-		end;
-	end;
+  while (not eof(fich)) and (not haypalabra) do
+  begin
+    if eoln(fich) then
+      readln(fich)
+    else
+    begin
+      read(fich, c);
+      if not espacios(c) then
+      begin
+        haypalabra := true;
+        addCaracter(pal, c);
+      end;
+    end;
+  end;
 
-	while (haypalabra) and (length(pal) <> MaxPalabra) do begin
-		addCaracter(pal, c);
-		if (eof(fich)) or (eoln(fich)) then begin
-			haypalabra := false;
-		end
-		else begin
-			read(fich, c);
-			haypalabra := not espacios(c);
-		end;
-	end;
+  while (haypalabra) and (length(pal) <> MaxPalabra) do
+  begin
+    if (eof(fich)) or (eoln(fich)) then
+      haypalabra := false
+    else
+    begin
+      read(fich, c);
+      if not espacios(c) then
+        addCaracter(pal, c)
+      else
+        haypalabra := false;
+    end;
+  end;
 end;
 
 procedure leernombre(var fich: text; var nombre: TipoNombre; var ok: boolean);
