@@ -13,11 +13,13 @@ const
   numColumnas = 10;
   MaxBarcos = 10;
   MaxDisparos = 10;
+  MaxPalabra = 20;
   Esp: char = ' ';
   Tab: string = '   ';
 
 type
   TipoPal = string;
+  TipoPalabra = string[MaxPalabra];
   TipoNombre = (Submarino, Dragaminas, Fragata, Portaaviones, FIN);
   TipoOrientacion = (Horizontal, Vertical);
 
@@ -43,7 +45,7 @@ begin
   espacios := (c = Esp) or (c = Tab);  
 end;
 
-procedure addcar(var pal: TipoPal; c: char);
+procedure addCaracter(var pal: TipoPal; c: char);
 var
   n: Integer;
 begin
@@ -53,30 +55,45 @@ begin
   pal[n] := c;
 end;
 
-procedure leerpal(var fich: text; var pal: TipoPal);
-var
-  c: char;
-  haypal: boolean;
+procedure borrar(var pal: TipoPal);
 begin
-  haypal := False;
-  pal := '';
-  while not eof(fich) and not haypal do begin
-    if eoln(fich) then begin
-      readln(fich);
-    end
-    else begin
+	pal := '';
+end;
+
+procedure leerpalabra(var fich: text; var pal: TipoPal);
+var
+  haypalabra: boolean;
+  c: char;
+begin
+  haypalabra := false;
+  borrar(pal);
+
+  while (not eof(fich)) and (not haypalabra) do
+  begin
+    if eoln(fich) then
+      readln(fich)
+    else
+    begin
       read(fich, c);
-      haypal := not espacios(c);
-      if haypal then begin
-        addcar(pal, c);
+      if not espacios(c) then
+      begin
+        haypalabra := true;
+        addCaracter(pal, c);
       end;
     end;
   end;
-  while haypal and not eof(fich) and not eoln(fich) do begin
-    read(fich, c);
-    haypal := not espacios(c);
-    if haypal then begin
-      addcar(pal, c);
+
+  while (haypalabra) and (length(pal) <> MaxPalabra) do
+  begin
+    if (eof(fich)) or (eoln(fich)) then
+      haypalabra := false
+    else
+    begin
+      read(fich, c);
+      if not espacios(c) then
+        addCaracter(pal, c)
+      else
+        haypalabra := false;
     end;
   end;
 end;
@@ -86,7 +103,7 @@ var
   pal: TipoPal;
   pos: integer;
 begin
-  leerpal(fich, pal);
+  leerpalabra(fich, pal);
   val(pal, nombre, pos);
   ok := pos = 0;
 end;
@@ -96,7 +113,7 @@ var
   pal: TipoPal;
   pos: integer;
 begin
-  leerpal(fich, pal);
+  leerpalabra(fich, pal);
   val(pal, orientacion, pos);
   ok := pos = 0;
 end;
@@ -118,7 +135,7 @@ var
   pal: TipoPal;
   pos: integer;
 begin
-  leerpal(fich, pal);
+  leerpalabra(fich, pal);
   val(pal, c, pos);  
   if pos <> 0 then
     letraANumero(pal, c, ok)
@@ -129,7 +146,7 @@ var
   pal: TipoPal;
   pos: integer;
 begin
-  leerpal(fich, pal);
+  leerpalabra(fich, pal);
   val(pal, f, pos);
   ok := pos = 0;
 end;
@@ -281,7 +298,7 @@ begin
       numDisparos := numDisparos + 1;
       disparos[numDisparos] := disparo;
     end
-    else if not ok then begin
+    else if not ok and (disparo.fila <> 0) then begin
       writeln('Error al leer un disparo');
     end;
   end;
@@ -314,3 +331,4 @@ begin
       realizarDisparo(disparos[i], Barcos, numBarcos);
   end;
 end.
+
