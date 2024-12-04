@@ -13,7 +13,7 @@ const
   numColumnas = 10;
   MaxBarcos = 10;
   MaxDisparos = 10;
-  MaxPalabra = 10;
+  MaxPalabra = 20;
   Esp: char = ' ';
   Tab: string = '   ';
 

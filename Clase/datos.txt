@@ -1,3 +1,6 @@
-Punto A 2 3
-        sfsf    Rectangulo # 1 1 5 5
-        Punto B 4 4
+Submarino Horizontal A 1
+Dragaminas Vertical B 3
+Fragata Horizontal D 5 
+Portaaviones Horizontal C 2 
+Submarino Horizontal A 4
+FIN B 4
