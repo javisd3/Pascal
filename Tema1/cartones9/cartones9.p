@@ -25,13 +25,6 @@ type
     Media: Integer;
   end;
 
-var
-  ListaCartones: array[1..MaxCartones] of TipoCarton;  
-  numCartones: Integer;
-  fich: TextFile;
-  ok: Boolean;
-  i: Integer;
-
 function espacios(c: char): boolean;
 begin
   espacios := (c = Esp) or (c = Tab);  
@@ -170,6 +163,13 @@ begin
   writeln;
 end;
 
+var
+  ListaCartones: array[1..MaxCartones] of TipoCarton;  
+  numCartones: Integer;
+  fich: TextFile;
+  ok: Boolean;
+  i: Integer;
+  
 begin
   assign(fich, 'datos.txt');
   reset(fich);
