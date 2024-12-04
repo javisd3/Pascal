@@ -323,3 +323,27 @@ begin
       realizarDisparo(disparos[i], Barcos, numBarcos);
   end;
 end.
+
+procedure leerDisparos(var fich: text; var disparos: TipoDisparos; var numDisparos: integer; var hayDisparos: boolean);
+var
+  disparo: TipoDisparo;
+  ok: boolean;
+begin
+  numDisparos := 0;
+  hayDisparos := False;
+  
+  while not eof(fich) do
+  begin
+    leerDisparo(fich, disparo, ok);
+    
+    // Si el disparo es inválido, imprimir error si no es un espacio.
+    if not ok then
+      writeln('Error al leer un disparo.')
+    else
+    begin
+      hayDisparos := True;
+      Inc(numDisparos);
+      disparos[numDisparos] := disparo;
+    end;
+  end;
+end;
