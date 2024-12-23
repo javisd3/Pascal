@@ -1,13 +1,10 @@
 {$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
-{
-Alumno: Javier San Martín Hurtado
-1ºCurso 1ºCuatrimestre
-}
 
-program cartones;
+program bingo;
 
 const
   MaxCartones = 10;
+  MaxPalabra = 20;
   Esp: char = ' ';
   Tab: string = '   ';
   FIN = 'FIN';
@@ -16,7 +13,6 @@ type
   TipoPal = string;
   TipoColor = (rojo, verde, azul, amarillo);
   TipoNumero = 1..100;  
-  TipoJugador = array[1..3] of TipoCarton;  
 
   TipoFila = record
     Color: TipoColor;
@@ -27,20 +23,12 @@ type
     Filas: array[1..3] of TipoFila;
   end;
   
-var
-  ListaCartones: array[1..MaxCartones] of TipoCarton;  
-  numCartones: Integer;
-  fich: TextFile;
-  ok: Boolean;
-  i, j: Integer;
-  jugador: Integer; 
-
 function espacios(c: char): boolean;
 begin
   espacios := (c = Esp) or (c = Tab);  
 end;
 
-procedure addcar(var pal: TipoPal; c: char);
+procedure addCaracter(var pal: TipoPal; c: char);
 var
   n: Integer;
 begin
@@ -50,30 +38,45 @@ begin
   pal[n] := c;
 end;
 
-procedure leerpal(var fich: text; var pal: TipoPal);
-var
-  c: char;
-  haypal: boolean;
+procedure borrar(var pal: TipoPal);
 begin
-  haypal := False;
   pal := '';
-  while not eof(fich) and not haypal do begin
-    if eoln(fich) then begin
-      readln(fich);
-    end
-    else begin
+end;
+
+procedure leerpalabra(var fich: text; var pal: TipoPal);
+var
+  haypalabra: boolean;
+  c: char;
+begin
+  haypalabra := false;
+  borrar(pal);
+
+  while (not eof(fich)) and (not haypalabra) do
+  begin
+    if eoln(fich) then
+      readln(fich)
+    else
+    begin
       read(fich, c);
-      haypal := not espacios(c);
-      if haypal then begin
-        addcar(pal, c);
+      if not espacios(c) then
+      begin
+        haypalabra := true;
+        addCaracter(pal, c);
       end;
     end;
   end;
-  while haypal and not eof(fich) and not eoln(fich) do begin
-    read(fich, c);
-    haypal := not espacios(c);
-    if haypal then begin
-      addcar(pal, c);
+
+  while (haypalabra) and (length(pal) <> MaxPalabra) do
+  begin
+    if (eof(fich)) or (eoln(fich)) then
+      haypalabra := false
+    else
+    begin
+      read(fich, c);
+      if not espacios(c) then
+        addCaracter(pal, c)
+      else
+        haypalabra := false;
     end;
   end;
 end;
@@ -83,7 +86,7 @@ var
   pal: TipoPal;
   pos: Integer;
 begin
-  leerpal(fich, pal);
+  leerpalabra(fich, pal);
   val(pal, color, pos);
   ok := pos = 0;
 end;
@@ -94,7 +97,7 @@ var
   pos: Integer;
   num: Integer;
 begin
-  leerpal(fich, pal);
+  leerpalabra(fich, pal);
   Val(pal, num, pos);
   ok := (pos = 0) and (num in [1..100]);
   if ok then
@@ -125,8 +128,6 @@ begin
     if not ok then begin
       while not eoln(fich) do readln(fich); 
       break;
-    if pal = FIN then begin
-    jugador := jugador + 1
     end;
   end;
 end;
@@ -160,26 +161,43 @@ begin
   end;
 end;
 
+var
+  ListaCartones: array[1..MaxCartones] of TipoCarton;  
+  numCartones: Integer;
+  fich: TextFile;
+  ok: Boolean;
+  i, j: Integer;
+  jugadorActual: Integer;
+  palabra: TipoPal;
+
 begin
   assign(fich, 'datos.txt');
   reset(fich);
   numCartones := 0;
-  jugador := 1; 
-  
+  jugadorActual := 1;
+
   while not eof(fich) and (numCartones < MaxCartones) do
   begin
     leerCarton(fich, ListaCartones[numCartones + 1], ok);
     if ok then
+    begin
       numCartones := numCartones + 1;
+      // Verifica si es FIN, para pasar al siguiente jugador
+      leerpalabra(fich, palabra);
+      if palabra = FIN then
+      begin
+      writeln('Jugador ', jugadorActual, ':');
+      for j := 1 to numCartones do
+      begin
+        escribirCarton(ListaCartones[j]);
+      end;
+      numCartones := 0; // Reset numCartones for the next player
+      if jugadorActual < 3 then
+      begin
+        jugadorActual := jugadorActual + 1;
+      end;
+      end;
     end;
   end;
   close(fich);
-
-  for i := 1 to jugador do begin
-    writeln('Jugador ', i, ':');
-    for j := 1 to numCartones do
-    begin
-      escribirCarton(ListaCartones[j]);
-    end;
-  end;
 end.
