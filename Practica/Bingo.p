@@ -161,36 +161,42 @@ begin
   end;
 end;
 
+procedure asignarCartonAJugador(var fich: TextFile; var ListaCartones: array of TipoCarton; var numCartones: Integer; var jugadorActual: Integer);
+var
+  palabra: TipoPal;
+  ok: Boolean;
+begin
+  leerCarton(fich, ListaCartones[numCartones + 1], ok);
+  if ok then
+  begin
+    numCartones := numCartones + 1;
+    writeln('Jugador ', jugadorActual, ', Carton ', numCartones, ':');
+    escribirCarton(ListaCartones[numCartones]);
+    leerpalabra(fich, palabra);
+    if palabra = FIN then
+    begin
+      numCartones := 0;
+      if jugadorActual < 3 then
+        jugadorActual := jugadorActual + 1;
+    end;
+  end;
+end;
+
 var
   ListaCartones: array[1..MaxCartones] of TipoCarton;  
   numCartones: Integer;
   fich: TextFile;
-  ok: Boolean;
-
   jugadorActual: Integer;
-  palabra: TipoPal;
-  begin
-    assign(fich, 'datos.txt');
-    reset(fich);
-    numCartones := 0;
-    jugadorActual := 1;
+begin
+  assign(fich, 'datos.txt');
+  reset(fich);
+  numCartones := 0;
+  jugadorActual := 1;
 
-    while not eof(fich) and (numCartones < MaxCartones) do
-    begin
-      leerCarton(fich, ListaCartones[numCartones + 1], ok);
-      if ok then
-      begin
-        numCartones := numCartones + 1;
-        writeln('Jugador ', jugadorActual, ', Carton ', numCartones, ':');
-        escribirCarton(ListaCartones[numCartones]);
-        leerpalabra(fich, palabra);
-        if palabra = FIN then
-        begin
-          numCartones := 0;
-          if jugadorActual < 3 then
-            jugadorActual := jugadorActual + 1;
-        end;
-      end;
-    end;
-    close(fich);
-  end.
+  while not eof(fich) and (numCartones < MaxCartones) do
+  begin
+    asignarCartonAJugador(fich, ListaCartones, numCartones, jugadorActual);
+  end;
+  
+  close(fich);
+end.
