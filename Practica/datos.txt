@@ -7,9 +7,6 @@ amarillo 3 4 7
 
 azul 1 2 3 4 5
 verde 6 7 8 9 10
-rojo 11 12 13 14 15
-amarillo 1 2 3 4 5
-verde 6 7 8 9 10
 rojo 11 12 13 14 15 FIN
 
 amarillo 18 17 16 15 14
