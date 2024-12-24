@@ -166,38 +166,31 @@ var
   numCartones: Integer;
   fich: TextFile;
   ok: Boolean;
-  i, j: Integer;
+
   jugadorActual: Integer;
   palabra: TipoPal;
-
-begin
-  assign(fich, 'datos.txt');
-  reset(fich);
-  numCartones := 0;
-  jugadorActual := 1;
-
-  while not eof(fich) and (numCartones < MaxCartones) do
   begin
-    leerCarton(fich, ListaCartones[numCartones + 1], ok);
-    if ok then
+    assign(fich, 'datos.txt');
+    reset(fich);
+    numCartones := 0;
+    jugadorActual := 1;
+
+    while not eof(fich) and (numCartones < MaxCartones) do
     begin
-      numCartones := numCartones + 1;
-      // Verifica si es FIN, para pasar al siguiente jugador
-      leerpalabra(fich, palabra);
-      if palabra = FIN then
+      leerCarton(fich, ListaCartones[numCartones + 1], ok);
+      if ok then
       begin
-      writeln('Jugador ', jugadorActual, ':');
-      for j := 1 to numCartones do
-      begin
-        escribirCarton(ListaCartones[j]);
-      end;
-      numCartones := 0; // Reset numCartones for the next player
-      if jugadorActual < 3 then
-      begin
-        jugadorActual := jugadorActual + 1;
-      end;
+        numCartones := numCartones + 1;
+        writeln('Jugador ', jugadorActual, ', Carton ', numCartones, ':');
+        escribirCarton(ListaCartones[numCartones]);
+        leerpalabra(fich, palabra);
+        if palabra = FIN then
+        begin
+          numCartones := 0;
+          if jugadorActual < 3 then
+            jugadorActual := jugadorActual + 1;
+        end;
       end;
     end;
-  end;
-  close(fich);
-end.
+    close(fich);
+  end.
