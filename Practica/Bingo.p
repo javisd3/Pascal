@@ -161,7 +161,7 @@ begin
   end;
 end;
 
-procedure asignarCartonAJugador(var fich: TextFile; var ListaCartones: array of TipoCarton; var numCartones: Integer; var jugadorActual: Integer);
+procedure asignarCartonAJugador(var fich: TextFile; var ListaCartones: array of TipoCarton; var numCartones: Integer; var jugador: Integer);
 var
   palabra: TipoPal;
   ok: Boolean;
@@ -170,14 +170,14 @@ begin
   if ok then
   begin
     numCartones := numCartones + 1;
-    writeln('Jugador ', jugadorActual, ', Carton ', numCartones, ':');
+    writeln('Jugador ', jugador, ', Carton ', numCartones, ':');
     escribirCarton(ListaCartones[numCartones]);
     leerpalabra(fich, palabra);
     if palabra = FIN then
     begin
       numCartones := 0;
-      if jugadorActual < 3 then
-        jugadorActual := jugadorActual + 1;
+      if jugador < 3 then
+        jugador := jugador + 1;
     end;
   end;
 end;
@@ -186,16 +186,16 @@ var
   ListaCartones: array[1..MaxCartones] of TipoCarton;  
   numCartones: Integer;
   fich: TextFile;
-  jugadorActual: Integer;
+  jugador: Integer;
 begin
   assign(fich, 'datos.txt');
   reset(fich);
   numCartones := 0;
-  jugadorActual := 1;
+  jugador := 1;
 
   while not eof(fich) and (numCartones < MaxCartones) do
   begin
-    asignarCartonAJugador(fich, ListaCartones, numCartones, jugadorActual);
+    asignarCartonAJugador(fich, ListaCartones, numCartones, jugador);
   end;
   
   close(fich);
