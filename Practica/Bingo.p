@@ -13,7 +13,7 @@ type
   TipoPal = string;
   TipoColor = (rojo, verde, azul, amarillo);
   TipoNumero = 1..100;  
-
+  
   TipoFila = record
     Color: TipoColor;
     Numeros: array[1..5] of TipoNumero;
@@ -21,6 +21,11 @@ type
 
   TipoCarton = record
     Filas: array[1..3] of TipoFila;
+  end;
+
+  TipoBola = record
+    Color: TipoColor;
+    Numeros: TipoNumero;
   end;
   
 function espacios(c: char): boolean;
@@ -132,20 +137,6 @@ begin
   end;
 end;
 
-procedure escribirCarton(carton: TipoCarton);
-var
-  i, j: Integer;
-begin
-  for i := 1 to 3 do begin
-    write(carton.Filas[i].Color, ' ');
-    for j := 1 to 5 do begin
-      write(carton.Filas[i].Numeros[j], ' ');
-    end;
-    writeln;
-  end;
-  writeln;
-end;
-
 procedure ordenarNumeros(var fila: TipoFila);
 var
   i, j, num: Integer;
@@ -159,6 +150,20 @@ begin
       end;
     end;
   end;
+end;
+
+procedure escribirCarton(carton: TipoCarton);
+var
+  i, j: Integer;
+begin
+  for i := 1 to 3 do begin
+    write(carton.Filas[i].Color, ' ');
+    for j := 1 to 5 do begin
+      write(carton.Filas[i].Numeros[j], ' ');
+    end;
+    writeln;
+  end;
+  writeln;
 end;
 
 procedure asignarCartonAJugador(var fich: TextFile; var ListaCartones: array of TipoCarton; var numCartones: Integer; var jugador: Integer);
