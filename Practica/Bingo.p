@@ -200,3 +200,22 @@ begin
   
   close(fich);
 end.
+
+  procedure tachar(var carton: TipoCarton; color: TipoColor; numero: TipoNumero);
+  var
+    i, j: Integer;
+  begin
+    for i := 1 to 3 do
+    begin
+      if carton.Filas[i].Color = color then
+      begin
+        for j := 1 to 5 do
+        begin
+          if carton.Filas[i].Numeros[j] = numero then
+          begin
+            carton.Filas[i].Numeros[j] := 0; // Assuming 0 represents XX
+          end;
+        end;
+      end;
+    end;
+  end;
