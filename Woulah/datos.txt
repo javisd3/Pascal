@@ -1,0 +1,16 @@
+rojo 3 2 10
+ 12 3
+verde 32 10 8
+ 50 12 
+amarillo 3 4 7
+ 5 2  FIN
+
+azul 1 2 3 4 5
+verde 6 7 8 9 10
+rojo 11 12 13 14 15 FIN
+
+amarillo 18 17 16 15 14
+rojo 12 13 14 15 16
+verde 1 2 3 4 5 FIN
+
+rojo 12 verde 1 verde 2
