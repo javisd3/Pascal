@@ -4,84 +4,84 @@
 program playbingo;
 
 const 
-    MaxCart=100;
-    tab:string='	';
-    numTachad:integer=101;
-    gap:string=' ';
-    maxExtracc=401;
+    MaxCartones = 25;
+    numTachado: integer = 100;
+    Esp: char = ' ';
+    Tab: char = '	';
+    maxExtracciones = 100;
 type
-    TipoNum = 1..101;
-    TipoColor=(Rojo,Azul,Amarillo,Verde,FIN);
+    TipoNum = 1..100;
+    TipoColor=(rojo, azul, amarillo, verde, FIN);
     TipoLinea = record
-        color:TipoColor;
-        nums:array[1..5] of TipoNum;
-        nnumeros:integer;
+        color: TipoColor;
+        numeros: array[1..5] of TipoNum;
+        nnumeros: integer;
     end;
     TipoCarton = record
         lineas: array[1..3] of TipoLinea;
         nlineas: integer;
     end;
-    TipoPlayer = record
-        cartones : array[1..MaxCart] of TipoCarton;
-        ncartones : integer;
+    TipoJugador = record
+        cartones: array[1..MaxCartones] of TipoCarton;
+        ncartones: integer;
     end;
     TipoEstado = (Jugando, Error, Ganador, Empate);
-    TipoGame = record 
-        jugadores: array[1..3] of TipoPlayer;
-        njugadores:integer;
-        estado:TipoEstado;
-        nganador:integer;
+    TipoJuego = record 
+        jugadores: array[1..3] of TipoJugador;
+        njugadores: integer;
+        estado: TipoEstado;
+        nganador: integer;
     end;
-    TipoExtrac=record
-        numero:TipoNum;
-        color:TipoColor;
+    TipoBola= record
+        numero: TipoNum;
+        color: TipoColor;
     end;
-    TipoResultExtrac=(Nada, Tachado, Bingo);
-    TipoResultadosExtrac=array[1..3] of TipoResultExtrac;
+    TipoResultExtrac= (Nada, Tachado, Bingo);
+    TipoResultadosExtrac= array[1..3] of TipoResultExtrac;
 
-    TipoListaExtracciones=record
-        extracciones:array[1..maxExtracc] of TipoExtrac;
-        nextracciones:integer;
+    TipoListaExtracciones= record
+        extracciones: array[1..maxExtracciones] of TipoBola;
+        nextracciones: integer;
     end;
-    TipoPunteroString=^string;
 
 
 function esBlanco(car:char):boolean;
 begin
-    result:= (car = gap ) or (car = tab);
+    result:= (car = Esp ) or (car = Tab);
 end;
 
-procedure vaciarPal(var pal:string);
+procedure borrar(var pal:string);
 begin
     pal:=''; 
 end;
+
 procedure addCar(var pal:string; c:char);
 begin
     pal:=pal+c;
 end;
 
-
-function leerPal(var entrada:text):string;
+function leerPalabra(var fich:text):string;
 var 
     tmpPal:string='';
     c:char;
     hayPal:boolean=false;
 begin
-    while not eof(entrada) and  not hayPal do begin
-        if( eoln(entrada) ) then 
-            readln(entrada)
+    borrar(tmpPal);
+    while not eof(fich) and  not hayPal do begin
+        if( eoln(fich) ) then 
+            readln(fich)
         else begin
-            read(entrada,c);
+            read(fich,c);
             hayPal:=not esBlanco(c);
         end;
     end;
     while hayPal do begin
         addCar(tmpPal,c);
-        if( eof(entrada) or eoln(entrada) ) then begin
+        if( eof(fich) or eoln(fich) ) then begin
             hayPal:=false;
         end else
         begin
-            read(entrada,c);
+            read(fich,c);
             hayPal:=not esBlanco(c);
         end;
     end;
@@ -89,26 +89,28 @@ begin
 end;
 
 
-function comprobarEsFin(palabra:string):boolean;
+function EsFin(palabra:string):boolean;
 var
-    color:TipoColor;
-    pos:integer;
+    color: TipoColor;
+    pos: integer;
 begin
     val(palabra,color,pos);
     result:= (pos = 0) and (color = FIN);
 end;
-function checkcolor(palabra:string;var color:TipoColor):boolean;
+
+function EsColor(palabra:string;var color:TipoColor):boolean;
 var 
-    pos:integer;
+    pos: integer;
 begin
     val(palabra,color,pos);
     result:= (pos = 0);
 end;
+
 function esTodoNumeros(palabra:string):boolean;
 var 
-    i:integer;
-    c:char;
-    esNum:boolean=true;
+    i: integer;
+    c: char;
+    esNum: boolean = true;
 begin
     for i := 1 to length(palabra) do begin
         c:=palabra[i];
@@ -116,42 +118,41 @@ begin
         if(not esNum) then 
             break;
     end;
-    result:=esNum;
-        
+    result:=esNum;        
 end;
 
-function checknum(palabra:string;var numero:TipoNum):boolean;
+function EsNumero(palabra:string;var numero:TipoNum):boolean;
 var
-    pos:integer;
+    pos: integer;
 begin
     val(palabra,numero,pos);
     result:= (pos = 0) ;
 end;
 
-procedure leerLinea(var entrada:text; var linea:TipoLinea; var hayFin:boolean);
+procedure leerLinea(var fich:text; var linea:TipoLinea; var hayFin:boolean);
 var 
-    tmpPal:string;
-    tmpCol:TipoColor;
-    tmpNum:TipoNum;
-    esNum:boolean=false;
-    i:integer;
+    tmpPal: string;
+    tmpCol: TipoColor;
+    tmpNum: TipoNum;
+    esNum: boolean = false;
+    i: integer;
 begin
-    tmpPal:=leerPal(entrada);
-    if(comprobarEsFin(tmpPal)) then begin
+    tmpPal:=leerPalabra(fich);
+    if(EsFin(tmpPal)) then begin
         hayFin:=true;
-    end else if(checkcolor(tmpPal,tmpCol)) then
+    end else if(EsColor(tmpPal,tmpCol)) then
     begin
       
         linea.color:=tmpCol;
 
         linea.nnumeros:=5;
         for i := 1 to linea.nnumeros do begin
-            tmpPal:=leerPal(entrada);
+            tmpPal:=leerPalabra(fich);
 
-            esNum:=esTodoNumeros(tmpPal) and checknum(tmpPal,tmpNum);
+            esNum:=esTodoNumeros(tmpPal) and EsNumero(tmpPal,tmpNum);
 
             if(esNum) then begin
-                linea.nums[i]:=tmpNum;
+                linea.numeros[i]:=tmpNum;
             end else
             begin
                 writeln('número ');
@@ -167,13 +168,13 @@ begin
     end;
 end;
 
-procedure readCarton(var entrada:text; var carton:TipoCarton; var hayFin:boolean);
+procedure leerCarton(var fich:text; var carton:TipoCarton; var hayFin:boolean);
 var
-    i:integer;
+    i: integer;
 begin
     carton.nlineas:=3;
     for i := 1 to carton.nlineas do begin
-        leerLinea(entrada,carton.lineas[i],hayFin);
+        leerLinea(fich,carton.lineas[i],hayFin);
         if(hayFin) then begin
             break;
         end;
@@ -181,14 +182,14 @@ begin
         
 end;
 
-procedure readPlayer(var entrada:text; var jugador:TipoPlayer);
+procedure leerJugador(var fich:text; var jugador:TipoJugador);
 var
-    hayFin:boolean=false;
-    tmpCarton:TipoCarton;
+    hayFin: boolean=false;
+    tmpCarton: TipoCarton;
 begin
     jugador.ncartones:=0;
     while not hayFin do begin
-        readCarton(entrada,tmpCarton,hayFin);
+        leerCarton(fich,tmpCarton,hayFin);
         if(not hayFin) then begin
             jugador.cartones[jugador.ncartones+1]:=tmpCarton;
             jugador.ncartones:=jugador.ncartones+1;
@@ -196,21 +197,21 @@ begin
     end;
 end;
 
-procedure leerFaseConfig(var entrada:text; var juego:TipoGame);
+procedure leerFaseConfig(var fich:text; var juego:TipoJuego);
 var 
-    i:integer;
+    i: integer;
 begin
     for i := 1 to 3 do begin
-        readPlayer(entrada, juego.jugadores[i]);
+        leerJugador(fich, juego.jugadores[i]);
     end;
 
         
 end;
 
-procedure writeCarton(carton:TipoCarton);
+procedure escribirCarton(carton:TipoCarton);
 var
-    i,j:integer;
-    linea:TipoLinea;
+    i,j: integer;
+    linea: TipoLinea;
 begin
     for i := 1 to 3 do begin
         linea:=carton.lineas[i];
@@ -218,11 +219,11 @@ begin
         write(linea.color);
         for j := 1 to 5 do begin
             write(' ');
-            if(linea.nums[j] = numTachad) then begin
+            if(linea.numeros[j] = numTachado) then begin
                 write('XX')
             end else
             begin
-                write(linea.nums[j]);
+                write(linea.numeros[j]);
             end;
         end;
          
@@ -230,21 +231,21 @@ begin
         
 end;
 
-procedure EscribirCartonesJugador(jugador:TipoPlayer;njug:integer);
+procedure EscribirCartonesJugador(jugador:TipoJugador;njug:integer);
 var 
-    i:integer;
+    i: integer;
 begin
     for i := 1 to jugador.ncartones do begin
         writeln();
         write('Jugador ',njug,' Carton ',i);
-        writeCarton(jugador.cartones[i]);
+        escribirCarton(jugador.cartones[i]);
     end;
         
 end;
 
-procedure EscribirCartonesJugadores(juego:TipoGame);
+procedure EscribirCartonesJugadores(juego:TipoJuego);
 var 
-    i:integer;
+    i: integer;
 begin
     for i := 1 to juego.njugadores do begin
         writeln();
@@ -253,17 +254,17 @@ begin
         
 end;
 
-function leerExtrac(var entrada:text; var hayError:boolean):TipoExtrac;
+function leerExtracciones(var fich:text; var hayError:boolean):TipoBola;
 var
-    tmpPal:string;
-    tmpCol:TipoColor;
-    tmpNum:TipoNum;
+    tmpPal: string;
+    tmpCol: TipoColor;
+    tmpNum: TipoNum;
 begin
-    tmpPal:=leerPal(entrada);
-    if(checkcolor(tmpPal,tmpCol)) then begin
+    tmpPal:=leerPalabra(fich);
+    if(EsColor(tmpPal,tmpCol)) then begin
         result.color:=tmpCol;
-        tmpPal:=leerPal(entrada);
-        if(checknum(tmpPal,tmpNum)) then begin
+        tmpPal:=leerPalabra(fich);
+        if(EsNumero(tmpPal,tmpNum)) then begin
             result.numero:=tmpNum;
         end else
         begin
@@ -274,13 +275,13 @@ begin
     end;
 end;
 
-function comprobarBingoJugador(jugador:TipoPlayer):boolean;
+function comprobarBingoJugador(jugador:TipoJugador):boolean;
 var
-    i,j,k:integer;
-    tmpCarton:TipoCarton;
-    tmpLin:TipoLinea;
-    tmpNum:TipoNum;
-    esBingoCarton:boolean;
+    i,j,k: integer;
+    tmpCarton: TipoCarton;
+    tmpLin: TipoLinea;
+    tmpNum: TipoNum;
+    esBingoCarton: boolean;
 begin
     for i := 1 to jugador.ncartones do begin
         esBingoCarton:=true;
@@ -288,8 +289,8 @@ begin
         for j := 1 to tmpCarton.nlineas do begin
             tmpLin:=tmpCarton.lineas[j];
             for k := 1 to tmpLin.nnumeros do begin
-                tmpNum:=tmpLin.nums[k];
-                if(tmpNum <> numTachad) then begin
+                tmpNum:=tmpLin.numeros[k];
+                if(tmpNum <> numTachado) then begin
                     esBingoCarton:=false;
                 end;
             end;
@@ -303,12 +304,12 @@ begin
         
 end;
 
-function resultExtracJugador(extrac:TipoExtrac; var jugador:TipoPlayer):TipoResultExtrac;
+function resultExtracJugador(extrac:TipoBola; var jugador:TipoJugador):TipoResultExtrac;
 var
-    i,j,k:integer;
-    tmpCarton:TipoCarton;
-    tmpLin:TipoLinea;
-    tmpNum:TipoNum;
+    i,j,k: integer;
+    tmpCarton: TipoCarton;
+    tmpLin: TipoLinea;
+    tmpNum: TipoNum;
 begin
     result:=Nada;
     for i := 1 to jugador.ncartones do begin
@@ -317,9 +318,9 @@ begin
             tmpLin:=tmpCarton.lineas[j];
             if(tmpLin.color = extrac.color) then begin
                 for k := 1 to tmpLin.nnumeros do begin
-                    tmpNum:=tmpLin.nums[k];
+                    tmpNum:=tmpLin.numeros[k];
                     if(extrac.numero = tmpNum) then begin
-                        jugador.cartones[i].lineas[j].nums[k]:=numTachad;
+                        jugador.cartones[i].lineas[j].numeros[k]:=numTachado;
                         result:=Tachado;
                     end;
                 end;
@@ -335,11 +336,9 @@ begin
         
 end;
 
-
-
-procedure showResult(resultados:TipoResultadosExtrac);
+procedure mostrarResultado(resultados:TipoResultadosExtrac);
 var
-    i:integer;
+    i: integer;
 begin
     for i := 1 to 3 do begin
         writeln();
@@ -348,10 +347,10 @@ begin
         
 end;
 
-function resultExtracJugadores(extrac:TipoExtrac;var juego:TipoGame):TipoResultadosExtrac;
+function resultExtracJugadores(extrac:TipoBola;var juego:TipoJuego):TipoResultadosExtrac;
 var
-    i:integer;
-    nganadores:integer=0;
+    i: integer;
+    nganadores: integer = 0;
 begin
     for i := 1 to juego.njugadores do begin
         result[i]:=resultExtracJugador(extrac,juego.jugadores[i]);
@@ -369,10 +368,10 @@ begin
         
 end;
 
-procedure terminarJuego(juego:TipoGame; listaExtrac:TipoListaExtracciones);
+procedure terminarJuego(juego:TipoJuego; listaExtrac:TipoListaExtracciones);
 var 
-    tmpExtrac:TipoExtrac;
-    i:integer;
+    tmpExtrac: TipoBola;
+    i: integer;
 begin
     
     for i := 1 to listaExtrac.nextracciones do begin
@@ -381,7 +380,6 @@ begin
         write(tmpExtrac.color,' ',tmpExtrac.numero);
     end;
         
-
     writeln();
     case juego.estado of
         Error:
@@ -393,17 +391,17 @@ begin
     end;
 end;
 
-procedure leerFaseExtrac(var entrada:text; juego:TipoGame);
+procedure leerFaseExtrac(var fich:text; juego:TipoJuego);
 var
-    tmpExtrac:TipoExtrac;
-    tmpResults:TipoResultadosExtrac;
-    listaExtrac:TipoListaExtracciones;
-    hayError:boolean=false;
+    tmpExtrac: TipoBola;
+    tmpResults: TipoResultadosExtrac;
+    listaExtrac: TipoListaExtracciones;
+    hayError: boolean = false;
 begin
     listaExtrac.nextracciones:=0;
-    while not eof(entrada) and (juego.estado=Jugando) do begin
+    while not eof(fich) and (juego.estado=Jugando) do begin
         EscribirCartonesJugadores(juego);
-        tmpExtrac:=leerExtrac(entrada,hayError);
+        tmpExtrac:=leerExtracciones(fich,hayError);
         if(hayError) then begin
             juego.estado:=Error;
         end else
@@ -412,7 +410,7 @@ begin
             listaExtrac.nextracciones:=listaExtrac.nextracciones+1;
 
             tmpResults:=resultExtracJugadores(tmpExtrac,juego);
-            showResult(tmpResults);
+            mostrarResultado(tmpResults);
         end;
 
     end;
@@ -420,20 +418,19 @@ begin
 end;
 
 var 
-    juego:TipoGame;
-    nombreArchivo:string='datos.txt';
-    entrada:text;
+    juego:TipoJuego;
+    fich: TextFile;
 begin
 
-    assign(entrada,nombreArchivo);
-    reset(entrada);
+    assign(fich, 'datos.txt');
+    reset(fich);
 
     juego.njugadores:=3;
 
-    leerFaseConfig(entrada,juego);
+    leerFaseConfig(fich,juego);
 
-    leerFaseExtrac(entrada,juego);
+    leerFaseExtrac(fich,juego);
 
-    close(entrada);
+    close(fich);
 
 end.
