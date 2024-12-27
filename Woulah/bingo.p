@@ -403,7 +403,7 @@ end;
 
 procedure noHayBingo(juego:TipoJuego; listaExtrac:TipoListaExtracciones; nganadores: integer);
 begin
-    if not (juego.estado = Error) and ( nganadores = 0 ) then begin
+    if (juego.estado <> Error) and (juego.estado <> Ganador) and (juego.estado <> Empate) and (nganadores = 0) then begin
         write('Empate');
     end;
 end;
