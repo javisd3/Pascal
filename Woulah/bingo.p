@@ -1,6 +1,7 @@
 {$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
 
-program bingo;
+
+program bingoPractica;
 
 const 
     MaxCartones = 25;
@@ -272,7 +273,7 @@ begin
     end;
 end;
 
-function comprobarBingoJugador(jugador:TipoJugador):boolean;
+function comprobarBingoJugador(jugador: TipoJugador):boolean;
 var
     i,j,k: integer;
     tmpCarton: TipoCarton;
@@ -293,7 +294,7 @@ begin
             end;
         end;
         if(esBingoCarton) then begin
-            result:=true;
+            result:= true;
             break;
         end;
             
@@ -328,7 +329,7 @@ begin
     end;
 
     if( comprobarBingoJugador(jugador) ) then begin
-        result:=Bingo;
+        result:= Bingo;
     end;
         
 end;
@@ -358,11 +359,11 @@ begin
     end;
 
     if( nganadores = 1 ) then begin
-        juego.estado:=Ganador;
-    end else if(nganadores > 1) then begin
-        juego.estado:=Ganador;
+        juego.estado:= Ganador;
+    end
+    else if(nganadores > 1) then begin
+        juego.estado:= Empate;
     end;
-        
 end;
 
 procedure terminarJuego(juego:TipoJuego; listaExtrac:TipoListaExtracciones);
@@ -384,7 +385,7 @@ begin
         Ganador:
             write('Ganador: Jugador ',juego.nganador);
         Empate:
-            write('Gana');
+            write('Empate');
     end;
 end;
 
