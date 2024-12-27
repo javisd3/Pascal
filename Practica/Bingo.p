@@ -1,143 +1,208 @@
 {$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
 
-program bingo;
 
-const
-  MaxCartones = 10;
-  MaxPalabra = 20;
-  Esp: char = ' ';
-  Tab: string = '   ';
-  FIN = 'FIN';
+program bingoPractica;
 
+const 
+    MaxCartones = 25;
+    numTachado: integer = 100;
+    Esp: char = ' ';
+    Tab: char = '	';
+    maxExtracciones = 100;
 type
-  TipoPal = string;
-  TipoColor = (rojo, verde, azul, amarillo);
-  TipoNumero = 1..100;  
-  
-  TipoFila = record
-    Color: TipoColor;
-    Numeros: array[1..5] of TipoNumero;
-  end;
+    TipoNum = 1..100;
+    TipoColor=(rojo, azul, amarillo, verde, FIN);
+    TipoLinea = record
+        color: TipoColor;
+        numeros: array[1..5] of TipoNum;
+        nnumeros: integer;
+    end;
+    TipoCarton = record
+        lineas: array[1..3] of TipoLinea;
+        nlineas: integer;
+    end;
+    TipoJugador = record
+        cartones: array[1..MaxCartones] of TipoCarton;
+        ncartones: integer;
+    end;
+    TipoEstado = (Jugando, Error, Ganador, Empate);
+    TipoJuego = record 
+        jugadores: array[1..3] of TipoJugador;
+        njugadores: integer;
+        estado: TipoEstado;
+        nganador: integer;
+    end;
+    TipoBola= record
+        numero: TipoNum;
+        color: TipoColor;
+    end;
+    TipoResultExtrac= (Nada, Tachado, Bingo);
+    TipoResultadosExtrac= array[1..3] of TipoResultExtrac;
 
-  TipoCarton = record
-    Filas: array[1..3] of TipoFila;
-  end;
+    TipoListaExtracciones= record
+        extracciones: array[1..maxExtracciones] of TipoBola;
+        nextracciones: integer;
+    end;
 
-  TipoBola = record
-    Color: TipoColor;
-    Numeros: TipoNumero;
-  end;
-  
-function espacios(c: char): boolean;
+
+function esBlanco(car:char):boolean;
 begin
-  espacios := (c = Esp) or (c = Tab);  
+    result:= (car = Esp ) or (car = Tab);
 end;
 
-procedure addCaracter(var pal: TipoPal; c: char);
+procedure borrar(var pal:string);
+begin
+    pal:=''; 
+end;
+
+procedure addCar(var pal:string; c:char);
+begin
+    pal:=pal+c;
+end;
+
+function leerPalabra(var fich:text):string;
+var 
+    tmpPal:string='';
+    c:char;
+    hayPal:boolean=false;
+begin
+    borrar(tmpPal);
+    while not eof(fich) and  not hayPal do begin
+        if( eoln(fich) ) then 
+            readln(fich)
+        else begin
+            read(fich,c);
+            hayPal:= not esBlanco(c);
+        end;
+    end;
+    while hayPal do begin
+        addCar(tmpPal,c);
+        if( eof(fich) or eoln(fich) ) then begin
+            hayPal:= false;
+        end else
+        begin
+            read(fich,c);
+            hayPal:= not esBlanco(c);
+        end;
+    end;
+    result:= tmpPal;
+end;
+
+
+function EsFin(palabra:string):boolean;
 var
-  n: Integer;
+    color: TipoColor;
+    pos: integer;
 begin
-  n := length(pal);
-  n := n + 1;
-  setlength(pal, n);
-  pal[n] := c;
+    val(palabra,color,pos);
+    result:= (pos = 0) and (color = FIN);
 end;
 
-procedure borrar(var pal: TipoPal);
+function EsColor(palabra:string;var color:TipoColor):boolean;
+var 
+    pos: integer;
 begin
-  pal := '';
+    val(palabra,color,pos);
+    result:= (pos = 0);
 end;
 
-procedure leerpalabra(var fich: text; var pal: TipoPal);
+function esTodoNumeros(palabra:string):boolean;
+var 
+    i: integer;
+    c: char;
+    esNum: boolean = true;
+begin
+    for i := 1 to length(palabra) do begin
+        c:=palabra[i];
+        esNum:=(c>='0') and (c<='9');
+        if(not esNum) then 
+            break;
+    end;
+    result:= esNum;        
+end;
+
+function EsNumero(palabra:string;var numero:TipoNum):boolean;
 var
-  haypalabra: boolean;
-  c: char;
+    pos: integer;
 begin
-  haypalabra := false;
-  borrar(pal);
+    val(palabra,numero,pos);
+    result:= (pos = 0) ;
+end;
 
-  while (not eof(fich)) and (not haypalabra) do
-  begin
-    if eoln(fich) then
-      readln(fich)
-    else
+procedure leerLinea(var fich: text; var linea: TipoLinea; var hayFin: boolean);
+var 
+    tmpPal: string;
+    tmpCol: TipoColor;
+    tmpNum: TipoNum;
+    esNum: boolean = false;
+    i: integer;
+begin
+    tmpPal:=leerPalabra(fich);
+    if(EsFin(tmpPal)) then begin
+        hayFin:= true;
+    end else if(EsColor(tmpPal,tmpCol)) then
     begin
-      read(fich, c);
-      if not espacios(c) then
-      begin
-        haypalabra := true;
-        addCaracter(pal, c);
-      end;
-    end;
-  end;
-
-  while (haypalabra) and (length(pal) <> MaxPalabra) do
-  begin
-    if (eof(fich)) or (eoln(fich)) then
-      haypalabra := false
-    else
+        linea.color:=tmpCol;
+        linea.nnumeros:= 5;
+        for i := 1 to linea.nnumeros do begin
+            tmpPal:=leerPalabra(fich);
+            esNum:=esTodoNumeros(tmpPal) and EsNumero(tmpPal,tmpNum);
+            if(esNum) then begin
+                linea.numeros[i]:=tmpNum;
+            end else
+            begin
+                writeln('Error: número inválido');
+                hayFin := true;
+                halt;
+            end;
+        end;
+    end else
     begin
-      read(fich, c);
-      if not espacios(c) then
-        addCaracter(pal, c)
-      else
-        haypalabra := false;
+        writeln('Error: color inválido');
+        hayFin := true;
+        halt;
     end;
-  end;
 end;
 
-procedure leercolor(var fich: text; var color: TipoColor; var ok: boolean);
+procedure leerCarton(var fich: text; var carton: TipoCarton; var hayFin: boolean);
 var
-  pal: TipoPal;
-  pos: Integer;
+    i: integer;
 begin
-  leerpalabra(fich, pal);
-  val(pal, color, pos);
-  ok := pos = 0;
-end;
-
-procedure leernumero(var fich: Text; var numero: TipoNumero; var ok: Boolean);
-var
-  pal: TipoPal;
-  pos: Integer;
-  num: Integer;
-begin
-  leerpalabra(fich, pal);
-  Val(pal, num, pos);
-  ok := (pos = 0) and (num in [1..100]);
-  if ok then
-    numero := num;
-end;
-
-procedure leerfila(var fich: text; var fila: TipoFila; var ok: boolean);
-var
-  i: Integer;
-begin
-  leercolor(fich, fila.Color, ok);  
-  if ok then begin
-    for i := 1 to 5 do begin  
-      leernumero(fich, fila.Numeros[i], ok);
-      if not ok then
-        break; 
+    carton.nlineas:=3;
+    for i := 1 to carton.nlineas do begin
+        leerLinea(fich,carton.lineas[i],hayFin);
+        if(hayFin) then begin
+            break;
+        end;
     end;
-  end;
+        
 end;
 
-procedure leerCarton(var fich: text; var carton: TipoCarton; var ok: boolean);
+procedure leerJugador(var fich:text; var jugador:TipoJugador);
 var
-  i: Integer;
+    hayFin: boolean=false;
+    tmpCarton: TipoCarton;
 begin
-  ok := True;
-  for i := 1 to 3 do begin
-    leerfila(fich, carton.Filas[i], ok);
-    if not ok then begin
-      while not eoln(fich) do readln(fich); 
-      break;
+    jugador.ncartones:=0;
+    while not hayFin do begin
+        leerCarton(fich,tmpCarton,hayFin);
+        if(not hayFin) then begin
+            jugador.cartones[jugador.ncartones + 1]:=tmpCarton;
+            jugador.ncartones:=jugador.ncartones + 1;
+        end;
     end;
-  end;
 end;
 
-procedure ordenarNumeros(var fila: TipoFila);
+procedure leerFaseConfig(var fich:text; var juego:TipoJuego);
+var 
+    i: integer;
+begin
+    for i := 1 to 3 do begin
+        leerJugador(fich, juego.jugadores[i]);
+    end;  
+end;
+
+procedure ordenarNumeros(var fila: TipoLinea);
 var
   i, j, num: Integer;
 begin
@@ -152,75 +217,239 @@ begin
   end;
 end;
 
-procedure escribirCarton(carton: TipoCarton);
+procedure escribirCarton(carton:TipoCarton);
 var
-  i, j: Integer;
+    i,j: integer;
+    linea: TipoLinea;
 begin
-  for i := 1 to 3 do begin
-    write(carton.Filas[i].Color, ' ');
-    for j := 1 to 5 do begin
-      write(carton.Filas[i].Numeros[j], ' ');
-    end;
-    writeln;
-  end;
-  writeln;
-end;
-
-procedure asignarCartonAJugador(var fich: TextFile; var ListaCartones: array of TipoCarton; var numCartones: Integer; var jugador: Integer);
-var
-  palabra: TipoPal;
-  ok: Boolean;
-begin
-  leerCarton(fich, ListaCartones[numCartones + 1], ok);
-  if ok then
-  begin
-    numCartones := numCartones + 1;
-    writeln('Jugador ', jugador, ', Carton ', numCartones, ':');
-    escribirCarton(ListaCartones[numCartones]);
-    leerpalabra(fich, palabra);
-    if palabra = FIN then
-    begin
-      numCartones := 0;
-      if jugador < 3 then
-        jugador := jugador + 1;
-    end;
-  end;
-end;
-
-var
-  ListaCartones: array[1..MaxCartones] of TipoCarton;  
-  numCartones: Integer;
-  fich: TextFile;
-  jugador: Integer;
-begin
-  assign(fich, 'datos.txt');
-  reset(fich);
-  numCartones := 0;
-  jugador := 1;
-
-  while not eof(fich) and (numCartones < MaxCartones) do
-  begin
-    asignarCartonAJugador(fich, ListaCartones, numCartones, jugador);
-  end;
-  
-  close(fich);
-end.
-
-  procedure tachar(var carton: TipoCarton; color: TipoColor; numero: TipoNumero);
-  var
-    i, j: Integer;
-  begin
-    for i := 1 to 3 do
-    begin
-      if carton.Filas[i].Color = color then
-      begin
-        for j := 1 to 5 do
-        begin
-          if carton.Filas[i].Numeros[j] = numero then
-          begin
-            carton.Filas[i].Numeros[j] := 0; // Assuming 0 represents XX
-          end;
+    for i := 1 to 3 do begin
+        ordenarNumeros(carton.lineas[i]);
+        linea:= carton.lineas[i];
+        writeln();
+        write(linea.color);
+        for j := 1 to 5 do begin
+            write(' ');
+            if(linea.numeros[j] = numTachado) then begin
+                write('XX')
+            end else
+            begin
+                write(linea.numeros[j]);
+            end;
         end;
-      end;
+         
     end;
-  end;
+        
+end;
+
+procedure EscribirCartonesJugador(jugador:TipoJugador;njug:integer);
+var 
+    i: integer;
+begin
+    for i := 1 to jugador.ncartones do begin
+        writeln();
+        write('Jugador ',njug,' Carton ',i);
+        escribirCarton(jugador.cartones[i]);
+    end;
+        
+end;
+
+procedure EscribirCartonesJugadores(juego:TipoJuego);
+var 
+    i: integer;
+begin
+    for i := 1 to juego.njugadores do begin
+        writeln();
+        EscribirCartonesJugador(juego.jugadores[i],i);
+    end;
+        
+end;
+
+function leerExtracciones(var fich:text; var hayError:boolean):TipoBola;
+var
+    tmpPal: string;
+    tmpCol: TipoColor;
+    tmpNum: TipoNum;
+begin
+    tmpPal:=leerPalabra(fich);
+    if(EsColor(tmpPal,tmpCol)) then begin
+        result.color:=tmpCol;
+        tmpPal:=leerPalabra(fich);
+        if(EsNumero(tmpPal,tmpNum)) then begin
+            result.numero:=tmpNum;
+        end else
+        begin
+            hayError:= true;
+        end;
+    end else begin
+        hayError:= true;
+    end;
+end;
+
+function comprobarBingoJugador(jugador: TipoJugador):boolean;
+var
+    i,j,k: integer;
+    tmpCarton: TipoCarton;
+    tmpLin: TipoLinea;
+    tmpNum: TipoNum;
+    esBingoCarton: boolean;
+begin
+    for i := 1 to jugador.ncartones do begin
+        esBingoCarton:=true;
+        tmpCarton:= jugador.cartones[i];
+        for j := 1 to tmpCarton.nlineas do begin
+            tmpLin:= tmpCarton.lineas[j];
+            for k := 1 to tmpLin.nnumeros do begin
+                tmpNum:=tmpLin.numeros[k];
+                if(tmpNum <> numTachado) then begin
+                    esBingoCarton:= false;
+                end;
+            end;
+        end;
+        if(esBingoCarton) then begin
+            result:= true;
+            break;
+        end;
+            
+    end;
+        
+end;
+
+function resultExtracJugador(extrac:TipoBola; var jugador:TipoJugador):TipoResultExtrac;
+var
+    i,j,k: integer;
+    tmpCarton: TipoCarton;
+    tmpLin: TipoLinea;
+    tmpNum: TipoNum;
+begin
+    result:=Nada;
+    for i := 1 to jugador.ncartones do begin
+        tmpCarton:=jugador.cartones[i];
+        for j := 1 to tmpCarton.nlineas do begin
+            tmpLin:=tmpCarton.lineas[j];
+            if(tmpLin.color = extrac.color) then begin
+                for k := 1 to tmpLin.nnumeros do begin
+                    tmpNum:=tmpLin.numeros[k];
+                    if(extrac.numero = tmpNum) then begin
+                        jugador.cartones[i].lineas[j].numeros[k]:=numTachado;
+                        result:=Tachado;
+                    end;
+                end;
+                    
+            end;
+        end;
+                
+    end;
+
+    if( comprobarBingoJugador(jugador) ) then begin
+        result:= Bingo;
+    end;
+        
+end;
+
+procedure mostrarResultado(resultados:TipoResultadosExtrac);
+var
+    i: integer;
+begin
+    for i := 1 to 3 do begin
+        writeln();
+        write('Jugador ',i,': ',resultados[i],'.');
+    end;
+        
+end;
+
+function resultExtracJugadores(extrac:TipoBola;var juego:TipoJuego):TipoResultadosExtrac;
+var
+    i: integer;
+    nganadores: integer = 0;
+begin
+    for i := 1 to juego.njugadores do begin
+        result[i]:=resultExtracJugador(extrac,juego.jugadores[i]);
+        if(result[i] = Bingo) then begin
+            nganadores:=nganadores + 1;
+            juego.nganador:= i;
+        end;
+    end;
+
+    if( nganadores = 1 ) then begin
+        juego.estado:= Ganador;
+    end
+    else if(nganadores > 1) then begin
+        juego.estado:= Empate;
+    end;
+end;
+
+procedure terminarJuego(juego:TipoJuego; listaExtrac:TipoListaExtracciones);
+var 
+    tmpExtrac: TipoBola;
+    i: integer;
+begin
+    
+    for i := 1 to listaExtrac.nextracciones do begin
+        tmpExtrac:=listaExtrac.extracciones[i];
+        writeln();
+        write(tmpExtrac.color,' ',tmpExtrac.numero);
+    end;
+        
+    writeln();
+    case juego.estado of
+        Error:
+            write('Error');
+        Ganador:
+            write('Ganador: Jugador ',juego.nganador);
+        Empate:
+            write('Empate');
+    end;
+end;
+
+procedure noHayBingo(juego:TipoJuego; listaExtrac:TipoListaExtracciones; nganadores: integer);
+begin
+    if (juego.estado <> Error) and (juego.estado <> Ganador) and (juego.estado <> Empate) and (nganadores = 0) then begin
+        write('Empate');
+    end;
+end;
+
+procedure leerFaseExtrac(var fich:text; juego:TipoJuego);
+var
+    tmpExtrac: TipoBola;
+    tmpResults: TipoResultadosExtrac;
+    listaExtrac: TipoListaExtracciones;
+    hayError: boolean = false;
+    nganadores: integer = 0;
+begin
+    listaExtrac.nextracciones:=0;
+    while not eof(fich) and (juego.estado=Jugando) do begin
+        EscribirCartonesJugadores(juego);
+        tmpExtrac:= leerExtracciones(fich,hayError);
+        if(hayError) then begin
+            juego.estado:=Error;
+        end else
+        begin
+            listaExtrac.extracciones[listaExtrac.nextracciones + 1]:= tmpExtrac;
+            listaExtrac.nextracciones:=listaExtrac.nextracciones + 1;
+
+            tmpResults:=resultExtracJugadores(tmpExtrac,juego);
+            mostrarResultado(tmpResults);
+        end;
+
+    end;
+    terminarJuego(juego,listaExtrac);
+    noHayBingo(juego,listaExtrac,nganadores);
+end;
+
+var 
+    juego:TipoJuego;
+    fich: TextFile;
+begin
+
+    assign(fich, 'datos.txt');
+    reset(fich);
+
+    juego.njugadores:= 3;
+
+    leerFaseConfig(fich,juego);
+
+    leerFaseExtrac(fich,juego);
+
+    close(fich);
+
+end.
