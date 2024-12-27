@@ -139,32 +139,28 @@ var
 begin
     tmpPal:=leerPalabra(fich);
     if(EsFin(tmpPal)) then begin
-        hayFin:=true;
+        hayFin:= true;
     end else if(EsColor(tmpPal,tmpCol)) then
     begin
-      
         linea.color:=tmpCol;
-
-        linea.nnumeros:=5;
+        linea.nnumeros:= 5;
         for i := 1 to linea.nnumeros do begin
             tmpPal:=leerPalabra(fich);
-
             esNum:=esTodoNumeros(tmpPal) and EsNumero(tmpPal,tmpNum);
-
             if(esNum) then begin
                 linea.numeros[i]:=tmpNum;
             end else
             begin
-                writeln('número ');
-                halt();
+                writeln('Error: número inválido');
+                hayFin := true;
+                halt;
             end;
         end;
-            
-
     end else
     begin
-        writeln('color');
-        halt();
+        writeln('Error: color inválido');
+        hayFin := true;
+        halt;
     end;
 end;
 
@@ -191,8 +187,8 @@ begin
     while not hayFin do begin
         leerCarton(fich,tmpCarton,hayFin);
         if(not hayFin) then begin
-            jugador.cartones[jugador.ncartones+1]:=tmpCarton;
-            jugador.ncartones:=jugador.ncartones+1;
+            jugador.cartones[jugador.ncartones + 1]:=tmpCarton;
+            jugador.ncartones:=jugador.ncartones + 1;
         end;
     end;
 end;
@@ -206,12 +202,28 @@ begin
     end;  
 end;
 
+procedure ordenarNumeros(var fila: TipoLinea);
+var
+  i, j, num: Integer;
+begin
+  for i := 1 to 4 do begin
+    for j := i + 1 to 5 do begin
+      if fila.Numeros[i] > fila.Numeros[j] then begin
+        num := fila.Numeros[i];
+        fila.Numeros[i] := fila.Numeros[j];
+        fila.Numeros[j] := num;
+      end;
+    end;
+  end;
+end;
+
 procedure escribirCarton(carton:TipoCarton);
 var
     i,j: integer;
     linea: TipoLinea;
 begin
     for i := 1 to 3 do begin
+        ordenarNumeros(carton.lineas[i]);
         linea:= carton.lineas[i];
         writeln();
         write(linea.color);
@@ -391,7 +403,7 @@ end;
 
 procedure noHayBingo(juego:TipoJuego; listaExtrac:TipoListaExtracciones; nganadores: integer);
 begin
-    if( nganadores = 0 ) then begin
+    if not (juego.estado = Error) and ( nganadores = 0 ) then begin
         write('Empate');
     end;
 end;
