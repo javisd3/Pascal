@@ -389,12 +389,20 @@ begin
     end;
 end;
 
+procedure noHayBingo(juego:TipoJuego; listaExtrac:TipoListaExtracciones; nganadores: integer);
+begin
+    if( nganadores = 0 ) then begin
+        write('Empate');
+    end;
+end;
+
 procedure leerFaseExtrac(var fich:text; juego:TipoJuego);
 var
     tmpExtrac: TipoBola;
     tmpResults: TipoResultadosExtrac;
     listaExtrac: TipoListaExtracciones;
     hayError: boolean = false;
+    nganadores: integer = 0;
 begin
     listaExtrac.nextracciones:=0;
     while not eof(fich) and (juego.estado=Jugando) do begin
@@ -413,6 +421,7 @@ begin
 
     end;
     terminarJuego(juego,listaExtrac);
+    noHayBingo(juego,listaExtrac,nganadores);
 end;
 
 var 
