@@ -1,7 +1,7 @@
 {$mode objfpc}{$H-}{$R+}{$T+}{$Q+}{$V+}{$D+}{$X-}{$warnings on}
 
 
-program playbingo;
+program bingo;
 
 const 
     MaxCartones = 25;
@@ -72,20 +72,20 @@ begin
             readln(fich)
         else begin
             read(fich,c);
-            hayPal:=not esBlanco(c);
+            hayPal:= not esBlanco(c);
         end;
     end;
     while hayPal do begin
         addCar(tmpPal,c);
         if( eof(fich) or eoln(fich) ) then begin
-            hayPal:=false;
+            hayPal:= false;
         end else
         begin
             read(fich,c);
-            hayPal:=not esBlanco(c);
+            hayPal:= not esBlanco(c);
         end;
     end;
-    result:=tmpPal;
+    result:= tmpPal;
 end;
 
 
@@ -118,7 +118,7 @@ begin
         if(not esNum) then 
             break;
     end;
-    result:=esNum;        
+    result:= esNum;        
 end;
 
 function EsNumero(palabra:string;var numero:TipoNum):boolean;
@@ -129,7 +129,7 @@ begin
     result:= (pos = 0) ;
 end;
 
-procedure leerLinea(var fich:text; var linea:TipoLinea; var hayFin:boolean);
+procedure leerLinea(var fich: text; var linea: TipoLinea; var hayFin: boolean);
 var 
     tmpPal: string;
     tmpCol: TipoColor;
@@ -168,7 +168,7 @@ begin
     end;
 end;
 
-procedure leerCarton(var fich:text; var carton:TipoCarton; var hayFin:boolean);
+procedure leerCarton(var fich: text; var carton: TipoCarton; var hayFin: boolean);
 var
     i: integer;
 begin
@@ -203,9 +203,7 @@ var
 begin
     for i := 1 to 3 do begin
         leerJugador(fich, juego.jugadores[i]);
-    end;
-
-        
+    end;  
 end;
 
 procedure escribirCarton(carton:TipoCarton);
@@ -214,7 +212,7 @@ var
     linea: TipoLinea;
 begin
     for i := 1 to 3 do begin
-        linea:=carton.lineas[i];
+        linea:= carton.lineas[i];
         writeln();
         write(linea.color);
         for j := 1 to 5 do begin
@@ -268,10 +266,10 @@ begin
             result.numero:=tmpNum;
         end else
         begin
-            hayError:=true;
+            hayError:= true;
         end;
     end else begin
-        hayError:=true;
+        hayError:= true;
     end;
 end;
 
@@ -285,13 +283,13 @@ var
 begin
     for i := 1 to jugador.ncartones do begin
         esBingoCarton:=true;
-        tmpCarton:=jugador.cartones[i];
+        tmpCarton:= jugador.cartones[i];
         for j := 1 to tmpCarton.nlineas do begin
-            tmpLin:=tmpCarton.lineas[j];
+            tmpLin:= tmpCarton.lineas[j];
             for k := 1 to tmpLin.nnumeros do begin
                 tmpNum:=tmpLin.numeros[k];
                 if(tmpNum <> numTachado) then begin
-                    esBingoCarton:=false;
+                    esBingoCarton:= false;
                 end;
             end;
         end;
@@ -355,8 +353,8 @@ begin
     for i := 1 to juego.njugadores do begin
         result[i]:=resultExtracJugador(extrac,juego.jugadores[i]);
         if(result[i] = Bingo) then begin
-            nganadores:=nganadores+1;
-            juego.nganador:=i;
+            nganadores:=nganadores + 1;
+            juego.nganador:= i;
         end;
     end;
 
@@ -385,7 +383,7 @@ begin
         Error:
             write('Error');
         Ganador:
-            write('Ganador: Jugador',juego.nganador);
+            write('Ganador: Jugador ',juego.nganador);
         Empate:
             write('Gana');
     end;
@@ -401,13 +399,13 @@ begin
     listaExtrac.nextracciones:=0;
     while not eof(fich) and (juego.estado=Jugando) do begin
         EscribirCartonesJugadores(juego);
-        tmpExtrac:=leerExtracciones(fich,hayError);
+        tmpExtrac:= leerExtracciones(fich,hayError);
         if(hayError) then begin
             juego.estado:=Error;
         end else
         begin
-            listaExtrac.extracciones[listaExtrac.nextracciones+1]:=tmpExtrac;
-            listaExtrac.nextracciones:=listaExtrac.nextracciones+1;
+            listaExtrac.extracciones[listaExtrac.nextracciones + 1]:= tmpExtrac;
+            listaExtrac.nextracciones:=listaExtrac.nextracciones + 1;
 
             tmpResults:=resultExtracJugadores(tmpExtrac,juego);
             mostrarResultado(tmpResults);
@@ -425,7 +423,7 @@ begin
     assign(fich, 'datos.txt');
     reset(fich);
 
-    juego.njugadores:=3;
+    juego.njugadores:= 3;
 
     leerFaseConfig(fich,juego);
 
