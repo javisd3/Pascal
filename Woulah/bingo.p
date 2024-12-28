@@ -282,6 +282,7 @@ var
     tmpNum:TipoNum;
     esBingoCarton:boolean;
 begin
+    result := false;
     for i := 1 to jugador.ncartones do begin
         esBingoCarton:=true;
         tmpCarton:=jugador.cartones[i];
@@ -296,11 +297,9 @@ begin
         end;
         if(esBingoCarton) then begin
             result:=true;
-            break;
+            exit;
         end;
-            
     end;
-        
 end;
 
 function resultExtracJugador(extrac:TipoExtrac; var jugador:TipoPlayer):TipoResultExtrac;
@@ -323,16 +322,13 @@ begin
                         result:=Tachado;
                     end;
                 end;
-                    
             end;
         end;
-                
     end;
 
-    if( comprobarBingoJugador(jugador) ) then begin
+    if comprobarBingoJugador(jugador) then begin
         result:=Bingo;
     end;
-        
 end;
 
 
