@@ -103,21 +103,6 @@ begin
     result := (posicion = 0);
 end;
 
-function probarNumero(cadena: string): boolean;
-var 
-    i: integer;
-    caracter: char;
-    esNumero: boolean = true;
-begin
-    for i := 1 to length(cadena) do begin
-        caracter := cadena[i];
-        esNumero := (caracter >= '0') and (caracter <= '9');
-        if not esNumero then 
-            break;
-    end;
-    result := esNumero;
-end;
-
 function comprobarNumero(cadena: string; var numero: TipoNumero): boolean;
 var
     posicion: integer;
@@ -142,7 +127,7 @@ begin
         Fila.cantidadNumeros := 5;
         for i := 1 to Fila.cantidadNumeros do begin
             cadena := leerCadena(fich);
-            esNumero := probarNumero(cadena) and comprobarNumero(cadena, numero);
+            esNumero := comprobarNumero(cadena, numero);
             if esNumero then begin
                 Fila.numeros[i] := numero;
             end else begin
