@@ -364,11 +364,19 @@ begin
     end;
 end;
 
+procedure noHayBingo(juego:TipoJuego; listaExtracciones: TipoListaExtracciones; numeroGanadores: integer);
+begin
+    if (juego.estado <> Error) and (juego.estado <> Ganador) and (juego.estado <> Empate) and (numeroGanadores = 0) then begin
+        write('Empate');
+    end;
+end;
+
 procedure leerFaseExtracciones(var fich: text; var juego: TipoJuego);
 var
     extraccion: TipoExtraccion;
     resultados: ResultExtracciones;
     listaExtracciones: TipoListaExtracciones;
+    numeroGanadores: integer = 0;
     hayError: boolean = false;
 begin
     listaExtracciones.cantidadExtracciones := 0;
@@ -385,6 +393,7 @@ begin
         end;
     end;
     terminarJuego(juego, listaExtracciones);
+    noHayBingo(juego, listaExtracciones, numeroGanadores);
 end;
 
 var 

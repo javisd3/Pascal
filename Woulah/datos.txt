@@ -20,4 +20,4 @@ rojo  3
 rojo  10
 rojo  12
 verde 32 verde 10 verde 8 verde 50 verde 12
-amarillo 3 amarillo 4 amarillo 7 amarillo 5 amarillo 2
+amarillo 3 amarillo 4 amarillo 7 amarillo 5 
