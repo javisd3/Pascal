@@ -66,6 +66,7 @@ var
     caracter: char;
     hayCadena: boolean = false;
 begin
+    vaciarCadena(cadenaTemporal);
     while not eof(entrada) and not hayCadena do begin
         if eoln(entrada) then 
             readln(entrada)
@@ -193,12 +194,28 @@ begin
     end;
 end;
 
+procedure ordenarNumeros(var fila: TipoLinea);
+var
+  i, j, num: Integer;
+begin
+  for i := 1 to 4 do begin
+    for j := i + 1 to 5 do begin
+      if fila.Numeros[i] > fila.Numeros[j] then begin
+        num := fila.Numeros[i];
+        fila.Numeros[i] := fila.Numeros[j];
+        fila.Numeros[j] := num;
+      end;
+    end;
+  end;
+end;
+
 procedure escribirCarton(carton: TipoCarton);
 var
     i, j: integer;
     linea: TipoLinea;
 begin
     for i := 1 to 3 do begin
+        ordenarNumeros(carton.lineas[i]);
         linea := carton.lineas[i];
         writeln();
         write(linea.color);
