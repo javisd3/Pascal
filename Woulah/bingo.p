@@ -59,27 +59,27 @@ begin
     cadena := cadena + caracter;
 end;
 
-function leerCadena(var entrada: text): string;
+function leerCadena(var fich: text): string;
 var 
     cadena: string = '';
     caracter: char;
     hayCadena: boolean = false;
 begin
     vaciarCadena(cadena);
-    while not eof(entrada) and not hayCadena do begin
-        if eoln(entrada) then 
-            readln(entrada)
+    while not eof(fich) and not hayCadena do begin
+        if eoln(fich) then 
+            readln(fich)
         else begin
-            read(entrada, caracter);
+            read(fich, caracter);
             hayCadena := not espacios(caracter);
         end;
     end;
     while hayCadena do begin
         agregarCaracter(cadena, caracter);
-        if eof(entrada) or eoln(entrada) then 
+        if eof(fich) or eoln(fich) then 
             hayCadena := false
         else begin
-            read(entrada, caracter);
+            read(fich, caracter);
             hayCadena := not espacios(caracter);
         end;
     end;
@@ -126,7 +126,7 @@ begin
     result := (posicion = 0);
 end;
 
-procedure leerFila(var entrada: text; var Fila: TipoFilas; var esFin: boolean);
+procedure leerFila(var fich: text; var Fila: TipoFilas; var esFin: boolean);
 var 
     cadena: string;
     color: TipoColor;
@@ -134,14 +134,14 @@ var
     esNumero: boolean = false;
     i: integer;
 begin
-    cadena := leerCadena(entrada);
+    cadena := leerCadena(fich);
     if comprobarEsFin(cadena) then begin
         esFin := true;
     end else if comprobarColor(cadena, color) then begin
         Fila.color := color;
         Fila.cantidadNumeros := 5;
         for i := 1 to Fila.cantidadNumeros do begin
-            cadena := leerCadena(entrada);
+            cadena := leerCadena(fich);
             esNumero := probarNumero(cadena) and comprobarNumero(cadena, numero);
             if esNumero then begin
                 Fila.numeros[i] := numero;
@@ -156,27 +156,27 @@ begin
     end;
 end;
 
-procedure leerCarton(var entrada: text; var carton: TipoCarton; var esFin: boolean);
+procedure leerCarton(var fich: text; var carton: TipoCarton; var esFin: boolean);
 var
     i: integer;
 begin
     carton.cantidadFilas := 3;
     for i := 1 to carton.cantidadFilas do begin
-        leerFila(entrada, carton.Filas[i], esFin);
+        leerFila(fich, carton.Filas[i], esFin);
         if esFin then begin
             break;
         end;
     end;
 end;
 
-procedure leerJugador(var entrada: text; var jugador: TipoJugador);
+procedure leerJugador(var fich: text; var jugador: TipoJugador);
 var
     esFin: boolean = false;
     carton: TipoCarton;
 begin
     jugador.cantidadCartones := 0;
     while not esFin do begin
-        leerCarton(entrada, carton, esFin);
+        leerCarton(fich, carton, esFin);
         if not esFin then begin
             jugador.cartones[jugador.cantidadCartones + 1] := carton;
             jugador.cantidadCartones := jugador.cantidadCartones + 1;
@@ -184,12 +184,12 @@ begin
     end;
 end;
 
-procedure leerFaseConfiguracion(var entrada: text; var juego: TipoJuego);
+procedure leerFaseConfiguracion(var fich: text; var juego: TipoJuego);
 var 
     i: integer;
 begin
     for i := 1 to 3 do begin
-        leerJugador(entrada, juego.jugadores[i]);
+        leerJugador(fich, juego.jugadores[i]);
     end;
 end;
 
@@ -250,16 +250,16 @@ begin
     end;
 end;
 
-function leerExtraccion(var entrada: text; var hayError: boolean): TipoExtraccion;
+function leerExtraccion(var fich: text; var hayError: boolean): TipoExtraccion;
 var
     cadena: string;
     color: TipoColor;
     numero: TipoNumero;
 begin
-    cadena := leerCadena(entrada);
+    cadena := leerCadena(fich);
     if comprobarColor(cadena, color) then begin
         result.color := color;
-        cadena := leerCadena(entrada);
+        cadena := leerCadena(fich);
         if comprobarNumero(cadena, numero) then begin
             result.numero := numero;
         end else begin
@@ -379,7 +379,7 @@ begin
     end;
 end;
 
-procedure leerFaseExtracciones(var entrada: text; var juego: TipoJuego);
+procedure leerFaseExtracciones(var fich: text; var juego: TipoJuego);
 var
     extraccion: TipoExtraccion;
     resultados: ResultExtracciones;
@@ -387,9 +387,9 @@ var
     hayError: boolean = false;
 begin
     listaExtracciones.cantidadExtracciones := 0;
-    while not eof(entrada) and (juego.estado = Jugando) do begin
+    while not eof(fich) and (juego.estado = Jugando) do begin
         escribirCartonesJugadores(juego);
-        extraccion := leerExtraccion(entrada, hayError);
+        extraccion := leerExtraccion(fich, hayError);
         if hayError then begin
             juego.estado := Error;
         end else begin
