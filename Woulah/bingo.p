@@ -36,8 +36,8 @@ type
         numero: TipoNumero;
         color: TipoColor;
     end;
-    FilasTipoResultExtraccion = (Nada, Tachado, Bingo);
-    TipoResultExtracciones = array[1..3] of FilasTipoResultExtraccion;
+    ResultExtraccion = (Nada, Tachado, Bingo);
+    ResultExtracciones = array[1..3] of ResultExtraccion;
 
     TipoListaExtracciones = record
         extracciones: array[1..maxExtracciones] of TipoExtraccion;
@@ -298,7 +298,7 @@ begin
     end;
 end;
 
-function resultadoExtraccionJugador(extraccion: TipoExtraccion; var jugador: TipoJugador): FilasTipoResultExtraccion;
+function resultadoExtraccionJugador(extraccion: TipoExtraccion; var jugador: TipoJugador): ResultExtraccion;
 var
     i, j, k: integer;
     carton: TipoCarton;
@@ -327,7 +327,7 @@ begin
     end;
 end;
 
-procedure mostrarResultados(resultados: TipoResultExtracciones);
+procedure mostrarResultados(resultados: ResultExtracciones);
 var
     i: integer;
 begin
@@ -337,7 +337,7 @@ begin
     end;
 end;
 
-function resultadoExtraccionJugadores(extraccion: TipoExtraccion; var juego: TipoJuego): TipoResultExtracciones;
+function resultadoExtraccionJugadores(extraccion: TipoExtraccion; var juego: TipoJuego): ResultExtracciones;
 var
     i: integer;
     numeroGanadores: integer = 0;
@@ -382,7 +382,7 @@ end;
 procedure leerFaseExtracciones(var entrada: text; var juego: TipoJuego);
 var
     extraccion: TipoExtraccion;
-    resultados: TipoResultExtracciones;
+    resultados: ResultExtracciones;
     listaExtracciones: TipoListaExtracciones;
     hayError: boolean = false;
 begin
