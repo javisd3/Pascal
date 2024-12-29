@@ -5,14 +5,9 @@ Alumno: Javier San Martín Hurtado
 1ºCurso 1ºCuatrimestre
 Doble grado teleco y ade
 }
-
 program arrays;
-var
-    numFilas: integer;
-    numColumnas: integer;
 const
   MaxBarcos = 10;
-
 type
   TipoEntrada = (Submarino, Dragaminas, Fragata, Portaaviones, FIN);
   TipoNombre = Submarino..Portaaviones;
@@ -23,7 +18,6 @@ type
     columna: integer;
     fila: integer;
   end;
-
   TipoBarco = record
     nombre: TipoNombre;
     proa: TipoCasilla;
@@ -104,7 +98,7 @@ begin
   end;
 end;
 
-procedure dibujartablero(Barcos: TipoBarcos; numBarcos: integer);
+procedure dibujartablero(Barcos: TipoBarcos; numBarcos: integer; numFilas: integer; numColumnas: integer);
 var
   fila: integer;
   columna: integer;
@@ -145,6 +139,8 @@ var
   numBarcos, numHundidos: integer;
   barco: TipoBarco;
   hayBarco: boolean;
+  numFilas: integer;
+  numColumnas: integer;
 begin
   numBarcos := 0;
   numHundidos := 0;
@@ -169,5 +165,5 @@ begin
   writeln(numBarcos, ' barcos');
   writeln(numHundidos, ' hundidos');
 
-  dibujartablero(Barcos, numBarcos);
+  dibujartablero(Barcos, numBarcos, numFilas, numColumnas);
 end.
