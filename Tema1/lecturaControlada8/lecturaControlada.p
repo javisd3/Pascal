@@ -298,8 +298,10 @@ begin
       numDisparos := numDisparos + 1;
       disparos[numDisparos] := disparo;
     end
-    else if not ok and (disparo.fila <> 0) then begin
+    else
+    begin
       writeln('Error al leer un disparo');
+      break;
     end;
   end;
 end;
