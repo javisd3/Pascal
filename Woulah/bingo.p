@@ -5,7 +5,7 @@ program jugarBingo;
 const 
     MaxCartones = 10;
     numeroTachado: integer = 100;
-    maxExtracciones = 100;
+    maxExtracciones = 50;
     espacio: string = ' ';
     tabulador: string = '	';
     
