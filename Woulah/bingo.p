@@ -122,7 +122,8 @@ begin
     cadena := leerCadena(fich);
     if comprobarEsFin(cadena) then begin
         esFin := true;
-    end else if comprobarColor(cadena, color) then begin
+    end 
+    else if comprobarColor(cadena, color) then begin
         Fila.color := color;
         Fila.cantidadNumeros := 5;
         for i := 1 to Fila.cantidadNumeros do begin
@@ -130,12 +131,14 @@ begin
             esNumero := comprobarNumero(cadena, numero);
             if esNumero then begin
                 Fila.numeros[i] := numero;
-            end else begin
+            end 
+            else begin
                 writeln('Error en el numero');
                 halt();
             end;
         end;
-    end else begin
+    end 
+    else begin
         writeln('Error en el color');
         halt();
     end;
@@ -207,7 +210,8 @@ begin
             write(' ');
             if Fila.numeros[j] = numeroTachado then begin
                 write('XX')
-            end else begin
+            end 
+            else begin
                 write(Fila.numeros[j]);
             end;
         end;
@@ -247,10 +251,12 @@ begin
         cadena := leerCadena(fich);
         if comprobarNumero(cadena, numero) then begin
             result.numero := numero;
-        end else begin
+        end 
+        else begin
             hayError := true;
         end;
-    end else begin
+    end 
+    else begin
         hayError := true;
     end;
 end;
@@ -306,7 +312,6 @@ begin
             end;
         end;
     end;
-
     if comprobarBingoJugador(jugador) then begin
         result := Bingo;
     end;
@@ -334,10 +339,10 @@ begin
             juego.numeroGanador := i;
         end;
     end;
-
     if numeroGanadores = 1 then begin
         juego.estado := Ganador;
-    end else if numeroGanadores > 1 then begin
+    end 
+    else if numeroGanadores > 1 then begin
         juego.estado := Empate;
     end;
 end;
@@ -352,7 +357,6 @@ begin
         writeln();
         write(extraccion.color, ' ', extraccion.numero);
     end;
-
     writeln();
     case juego.estado of
         Error:
@@ -366,7 +370,8 @@ end;
 
 procedure noHayBingo(juego:TipoJuego; listaExtracciones: TipoListaExtracciones; numeroGanadores: integer);
 begin
-    if (juego.estado <> Error) and (juego.estado <> Ganador) and (juego.estado <> Empate) and (numeroGanadores = 0) then begin
+    if (juego.estado <> Error) and (juego.estado <> Ganador) and 
+    (juego.estado <> Empate) and (numeroGanadores = 0) then begin
         write('Empate');
     end;
 end;
@@ -385,7 +390,8 @@ begin
         extraccion := leerExtraccion(fich, hayError);
         if hayError then begin
             juego.estado := Error;
-        end else begin
+        end 
+        else begin
             listaExtracciones.extracciones[listaExtracciones.cantidadExtracciones + 1] := extraccion;
             listaExtracciones.cantidadExtracciones := listaExtracciones.cantidadExtracciones + 1;
             resultados := resultadoExtraccionJugadores(extraccion, juego);
