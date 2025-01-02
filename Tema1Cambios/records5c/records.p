@@ -16,7 +16,7 @@ type
     palo: TPalo;      
   end;
   TJugador = record
-    nifNumero: integer;
+    nifNumero: 1..1000;
     nifLetra: char;
     rango: TRango;
     carta1, carta2, carta3, carta4: TCarta; 
