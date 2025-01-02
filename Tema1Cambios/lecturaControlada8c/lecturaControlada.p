@@ -312,6 +312,7 @@ var
   disparos: TipoDisparos;
   numBarcos, numDisparos, i: integer;
   llegoFin, hayDisparos, puedeContinuar: boolean;
+  contarSubmarino, contarDragaminas, contarFragata, contarPortaaviones: integer;
 
 begin
   assign(fich, 'datos.txt');
@@ -322,15 +323,30 @@ begin
 
   if puedeContinuar then
   begin
-    leerDisparos(fich, disparos, numDisparos, hayDisparos);
-  end;
-
+  leerDisparos(fich, disparos, numDisparos, hayDisparos);
   close(fich);
 
-  begin
-    dibujartablero(Barcos, numBarcos);
-    for i := 1 to numDisparos do
-      realizarDisparo(disparos[i], Barcos, numBarcos);
+  contarSubmarino := 0;
+  contarDragaminas := 0;
+  contarFragata := 0;
+  contarPortaaviones := 0;
+  dibujartablero(Barcos, numBarcos);
+  for i := 1 to numDisparos do
+    realizarDisparo(disparos[i], Barcos, numBarcos);
+  for i := 1 to numBarcos do
+    begin
+      case Barcos[i].nombre of
+        Submarino: contarSubmarino := contarSubmarino + 1;
+        Dragaminas: contarDragaminas := contarDragaminas + 1;
+        Fragata: contarFragata := contarFragata + 1;
+        Portaaviones: contarPortaaviones := contarPortaaviones + 1;
+      end;
+    end;
+
+    writeln('Submarinos: ', contarSubmarino);
+    writeln('Dragaminas: ', contarDragaminas);
+    writeln('Fragatas: ', contarFragata);
+    writeln('Portaaviones: ', contarPortaaviones);
   end;
 end.
 
