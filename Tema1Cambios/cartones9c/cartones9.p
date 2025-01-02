@@ -126,12 +126,28 @@ procedure calcularMedia(var carton: TipoCarton);
 var
   i, j: Integer;
   sumaTotal: Integer;
-begin
-  sumaTotal := 0;
-  for i := 1 to 3 do
-    for j := 1 to 5 do
-      sumaTotal := sumaTotal + carton.Filas[i].Numeros[j];
+  mismoColor: Boolean;
+  color: TipoColor;
+
+  begin
+  mismoColor := True;
+  color := carton.Filas[1].Color;
+  for i := 2 to 3 do
+    if carton.Filas[i].Color <> color then
+    begin
+      mismoColor := False;
+      break;
+    end;
+  if mismoColor then
+  begin
+    carton.Media := 100;
+    exit;
+  end;
   
+sumaTotal := 0;
+for i := 1 to 3 do
+  for j := 1 to 5 do
+  sumaTotal := sumaTotal + carton.Filas[i].Numeros[j]; 
   carton.Media := sumaTotal div 15;
 end;
 
@@ -205,5 +221,6 @@ begin
   for i := 1 to numCartones do
   begin
     escribirCarton(ListaCartones[i]);
+    writeln('Media: ', ListaCartones[i].Media);
   end;
 end.
