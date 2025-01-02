@@ -218,7 +218,7 @@ begin
 
   ordenarCartones(ListaCartones, numCartones);
 
-  for i := 1 to numCartones do
+  for i := numCartones downto 1 do
   begin
     escribirCarton(ListaCartones[i]);
     writeln('Media: ', ListaCartones[i].Media);
