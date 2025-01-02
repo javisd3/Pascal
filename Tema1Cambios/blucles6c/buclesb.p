@@ -7,7 +7,6 @@ Doble grado teleco y ade
 }
 
 program bucles;
-
 type
     TFigura = (Cuadrado, Rectangulo, TrianguloIzqdo, TrianguloDrcho, Triangulo);
 
@@ -24,6 +23,7 @@ var
     contador, totalFiguras, totalLineas: integer;
     figuraMenorAltura: TfiguraR;
     primeraFigura: boolean;
+    totalcaracteres: integer;
 
 procedure DibujarCuadrado(altura: integer; caracter: char);
 var
@@ -156,7 +156,14 @@ begin
         primeraFigura := false;
     end;
 end;
-
+procedure ContarCaracteres(figura: TfiguraR);
+begin
+    case figura.figura of
+        Cuadrado: totalcaracteres := totalcaracteres + (figura.altura * figura.altura);
+        Rectangulo: totalcaracteres := totalcaracteres + (figura.altura * figura.ancho);
+        TrianguloIzqdo, TrianguloDrcho, Triangulo: totalcaracteres := totalcaracteres + ((figura.altura * (figura.altura + 1)) div 2);
+    end;
+end;
 procedure MostrarNombreFiguraMenorAltura(figura: TfiguraR);
 begin
     case figura.figura of
@@ -185,7 +192,7 @@ begin
             5: SolicitarDatos(figura5);
         end;
 
-        writeln('¿Deseas continuar?');
+        writeln('¿Finalizar?');
         readln(parar);
     until (parar = 'F') or (contador = 5);
 
@@ -196,34 +203,41 @@ begin
     begin
         DibujarFigura(figura1);
         EvaluarEstadisticas(figura1);
+        ContarCaracteres(figura1);
         writeln();
     end;
     if contador >= 2 then
     begin
         DibujarFigura(figura2);
         EvaluarEstadisticas(figura2);
+        ContarCaracteres(figura2);
         writeln();
     end;
     if contador >= 3 then
     begin
         DibujarFigura(figura3);
         EvaluarEstadisticas(figura3);
+        ContarCaracteres(figura3);
         writeln();
     end;
     if contador >= 4 then
     begin
         DibujarFigura(figura4);
         EvaluarEstadisticas(figura4);
+        ContarCaracteres(figura4);
         writeln();
     end;
     if contador >= 5 then
     begin
         DibujarFigura(figura5);
         EvaluarEstadisticas(figura5);
+        ContarCaracteres(figura5);
         writeln();
     end;
 
     writeln('Total de figuras dibujadas: ', totalFiguras);
     writeln('Total de lineas dibujadas: ', totalLineas);
     MostrarNombreFiguraMenorAltura(figuraMenorAltura);
+    writeln('Total de caracteres:', totalcaracteres);
+    
 end.
