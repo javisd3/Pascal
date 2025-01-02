@@ -9,8 +9,8 @@ program arrays;
 const
   MaxBarcos = 10;
 type
-  TipoEntrada = (Submarino, Dragaminas, Fragata, Portaaviones, FIN);
-  TipoNombre = Submarino..Portaaviones;
+  TipoEntrada = (Dragaminas, Fragata, Portaaviones, FIN);
+  TipoNombre = Dragaminas..Portaaviones;
   TipoOrientacion = (Horizontal, Vertical);
   TipoEstado = (Tocado, Hundido);
 
@@ -60,7 +60,6 @@ end;
 function longitudbarco(barco: TipoBarco): integer;
 begin
   case barco.nombre of
-    Submarino: longitudbarco := 1;
     Dragaminas: longitudbarco := 2;
     Fragata: longitudbarco := 3;
     Portaaviones: longitudbarco := 4;
@@ -70,7 +69,6 @@ end;
 function InicialDelBarco(barco: TipoBarco): char;
 begin
   case barco.nombre of
-    Submarino: InicialDelBarco := 'S';
     Dragaminas: InicialDelBarco := 'D';
     Fragata: InicialDelBarco := 'F';
     Portaaviones: InicialDelBarco := 'P';
@@ -128,7 +126,7 @@ begin
       end;
 
       if not hayBarco then
-        write('.', ' ');
+        write(' ', ' ');
     end;
     writeln;
   end;
@@ -136,7 +134,7 @@ end;
 
 var
   Barcos: TipoBarcos;
-  numBarcos, numHundidos: integer;
+  numBarcos, numHundidos, numintactos: integer;
   barco: TipoBarco;
   hayBarco: boolean;
   numFilas: integer;
@@ -144,6 +142,7 @@ var
 begin
   numBarcos := 0;
   numHundidos := 0;
+  numintactos := 0;
 
   writeln('Numero de filas:');
   readln(numFilas);
@@ -159,11 +158,14 @@ begin
 
       if barco.estado = Hundido then
         numHundidos := numHundidos + 1;
+      if barco.estado <> Hundido then
+        numintactos := numintactos + 1;
     end;
   until not hayBarco;
 
   writeln(numBarcos, ' barcos');
   writeln(numHundidos, ' hundidos');
+  writeln(numintactos, ' intactos');
 
   dibujartablero(Barcos, numBarcos, numFilas, numColumnas);
 end.
