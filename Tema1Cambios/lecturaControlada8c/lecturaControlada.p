@@ -293,15 +293,15 @@ begin
   begin
     leerDisparo(fich, disparo, ok);
     if ok then
+    if (disparo.columna = disparo.fila) then
+    begin
+      writeln('Casilla especial');
+      break;
+    end;
     begin
       hayDisparos := true;
       numDisparos := numDisparos + 1;
       disparos[numDisparos] := disparo;
-    end
-    else
-    begin
-      writeln('Error al leer un disparo');
-      break;
     end;
   end;
 end;
