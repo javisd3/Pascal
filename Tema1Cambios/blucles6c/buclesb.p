@@ -41,6 +41,11 @@ procedure DibujarRectangulo(alto, ancho: integer; caracter: char);
 var
     i, j: integer;
 begin
+    if alto = ancho then
+    begin
+        writeln('Es cuadrado');
+        exit;
+    end;
     for i := 1 to alto do
     begin
         for j := 1 to ancho do
