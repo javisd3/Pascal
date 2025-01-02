@@ -19,14 +19,16 @@ type
     nifNumero: integer;
     nifLetra: char;
     rango: TRango;
-    carta1, carta2, carta3: TCarta; 
+    carta1, carta2, carta3, carta4: TCarta; 
     puntos: integer;  
   end;
 
 function CalcularPuntuacionCarta(carta: TCarta): integer;
 begin
   case carta.numero of
-    1, 10, 11, 12: CalcularPuntuacionCarta := 10; 
+    1, 10: CalcularPuntuacionCarta := 10; 
+    11: CalcularPuntuacionCarta := 11; 
+    12: CalcularPuntuacionCarta := 12; 
   else
     CalcularPuntuacionCarta := carta.numero; 
   end;
@@ -36,7 +38,8 @@ function CalcularPuntuacionJugador(jugador: TJugador): integer;
 begin
   CalcularPuntuacionJugador := CalcularPuntuacionCarta(jugador.carta1) +
                                CalcularPuntuacionCarta(jugador.carta2) +
-                               CalcularPuntuacionCarta(jugador.carta3);
+                               CalcularPuntuacionCarta(jugador.carta3) +
+                               CalcularPuntuacionCarta(jugador.carta4);
 end;
 
 procedure LeerCarta(var carta: TCarta);
@@ -66,6 +69,7 @@ begin
   LeerCarta(jugador.carta1);
   LeerCarta(jugador.carta2);
   LeerCarta(jugador.carta3);
+  LeerCarta(jugador.carta4);
   
   jugador.puntos := CalcularPuntuacionJugador(jugador);
 end;
@@ -86,9 +90,9 @@ procedure DeterminarGanador(jugador1, jugador2: TJugador);
 var
   ganador: integer;
 begin
-  if (jugador1.puntos <= 20) and ((jugador1.puntos > jugador2.puntos) or (jugador2.puntos > 20)) then
+  if (jugador1.puntos <= 40) and ((jugador1.puntos > jugador2.puntos) or (jugador2.puntos > 40)) then
     ganador := 1
-  else if (jugador2.puntos <= 20) and ((jugador2.puntos > jugador1.puntos) or (jugador1.puntos > 20)) then
+  else if (jugador2.puntos <= 40) and ((jugador2.puntos > jugador1.puntos) or (jugador1.puntos > 40)) then
     ganador := 2
   else
     ganador := 0; 
@@ -101,7 +105,7 @@ begin
   else if ganador = 2 then
     writeln('Ganador: Jugador 2')
   else
-    writeln('Ganador: Ninguno, ambos pierden');
+    writeln('No hay ganador');
 end;
 
 var
