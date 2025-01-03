@@ -306,6 +306,26 @@ begin
   end;
 end;
 
+procedure contarBarcos(Barcos: TipoBarcos; numBarcos: integer; var contarSubmarino, contarDragaminas, contarFragata, contarPortaaviones: integer);
+var
+  i: integer;
+begin
+  contarSubmarino := 0;
+  contarDragaminas := 0;
+  contarFragata := 0;
+  contarPortaaviones := 0;
+  
+  for i := 1 to numBarcos do
+  begin
+    case Barcos[i].nombre of
+      Submarino: contarSubmarino := contarSubmarino + 1;
+      Dragaminas: contarDragaminas := contarDragaminas + 1;
+      Fragata: contarFragata := contarFragata + 1;
+      Portaaviones: contarPortaaviones := contarPortaaviones + 1;
+    end;
+  end;
+end;
+
 var
   fich: text;
   Barcos: TipoBarcos;
@@ -320,33 +340,22 @@ begin
 
   leerBarcos(fich, Barcos, numBarcos, llegoFin);
   puedeContinuar := llegoFin;
-
+  contarBarcos(Barcos, numBarcos, contarSubmarino, contarDragaminas, contarFragata, contarPortaaviones);
+  writeln('Submarinos: ', contarSubmarino);
+  writeln('Dragaminas: ', contarDragaminas);
+  writeln('Fragatas: ', contarFragata);
+  writeln('Portaaviones: ', contarPortaaviones);
   if puedeContinuar then
   begin
-  leerDisparos(fich, disparos, numDisparos, hayDisparos);
+    leerDisparos(fich, disparos, numDisparos, hayDisparos);
+  end;
+
   close(fich);
 
-  contarSubmarino := 0;
-  contarDragaminas := 0;
-  contarFragata := 0;
-  contarPortaaviones := 0;
-  dibujartablero(Barcos, numBarcos);
-  for i := 1 to numDisparos do
-    realizarDisparo(disparos[i], Barcos, numBarcos);
-  for i := 1 to numBarcos do
-    begin
-      case Barcos[i].nombre of
-        Submarino: contarSubmarino := contarSubmarino + 1;
-        Dragaminas: contarDragaminas := contarDragaminas + 1;
-        Fragata: contarFragata := contarFragata + 1;
-        Portaaviones: contarPortaaviones := contarPortaaviones + 1;
-      end;
-    end;
-
-    writeln('Submarinos: ', contarSubmarino);
-    writeln('Dragaminas: ', contarDragaminas);
-    writeln('Fragatas: ', contarFragata);
-    writeln('Portaaviones: ', contarPortaaviones);
+  begin
+    dibujartablero(Barcos, numBarcos);
+    for i := 1 to numDisparos do
+      realizarDisparo(disparos[i], Barcos, numBarcos);
   end;
 end.
 
