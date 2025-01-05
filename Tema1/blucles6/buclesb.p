@@ -17,13 +17,7 @@ type
         altura, ancho: integer;
     end;
 
-var
-    figura1, figura2, figura3, figura4, figura5: TfiguraR;
-    nombreFigura: integer;
-    parar: char;
-    contador, totalFiguras, totalLineas: integer;
-    figuraMenorAltura: TfiguraR;
-    primeraFigura: boolean;
+
 
 procedure DibujarCuadrado(altura: integer; caracter: char);
 var
@@ -90,6 +84,8 @@ begin
 end;
 
 procedure SolicitarDatos(var figura: TfiguraR);
+var
+    nombreFigura: integer;
 begin
     writeln('Elige una figura:');
     writeln('0 - Cuadrado');
@@ -145,7 +141,7 @@ begin
     end;
 end;
 
-procedure EvaluarEstadisticas(figura: TfiguraR);
+procedure EvaluarEstadisticas(figura: TfiguraR; var totalFiguras, totalLineas: integer; var figuraMenorAltura: TfiguraR; var primeraFigura: boolean);
 begin
     totalFiguras := totalFiguras + 1;
     totalLineas := totalLineas + figura.altura;
@@ -167,6 +163,13 @@ begin
         Triangulo: writeln('La figura de menor altura es: Triangulo');
     end;
 end;
+
+var
+    figura1, figura2, figura3, figura4, figura5: TfiguraR;
+    parar: char;
+    contador, totalFiguras, totalLineas: integer;
+    figuraMenorAltura: TfiguraR;
+    primeraFigura: boolean;
 
 begin
     contador := 0;
@@ -195,31 +198,31 @@ begin
     if contador >= 1 then
     begin
         DibujarFigura(figura1);
-        EvaluarEstadisticas(figura1);
+        EvaluarEstadisticas(figura1, totalFiguras, totalLineas, figuraMenorAltura, primeraFigura);
         writeln();
     end;
     if contador >= 2 then
     begin
         DibujarFigura(figura2);
-        EvaluarEstadisticas(figura2);
+        EvaluarEstadisticas(figura2, totalFiguras, totalLineas, figuraMenorAltura, primeraFigura);
         writeln();
     end;
     if contador >= 3 then
     begin
         DibujarFigura(figura3);
-        EvaluarEstadisticas(figura3);
+        EvaluarEstadisticas(figura3, totalFiguras, totalLineas, figuraMenorAltura, primeraFigura);
         writeln();
     end;
     if contador >= 4 then
     begin
         DibujarFigura(figura4);
-        EvaluarEstadisticas(figura4);
+        EvaluarEstadisticas(figura4, totalFiguras, totalLineas, figuraMenorAltura, primeraFigura);
         writeln();
     end;
     if contador >= 5 then
     begin
         DibujarFigura(figura5);
-        EvaluarEstadisticas(figura5);
+        EvaluarEstadisticas(figura5, totalFiguras, totalLineas, figuraMenorAltura, primeraFigura);
         writeln();
     end;
 
