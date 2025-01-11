@@ -45,8 +45,6 @@ begin
 end;
 
 procedure LeerJugador(var jugador: TJugador);
-var
-  rango: integer;  
 begin
   write('Numero del NIF: ');
   readln(jugador.nifNumero);
