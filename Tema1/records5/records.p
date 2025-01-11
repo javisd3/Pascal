@@ -16,8 +16,8 @@ type
     palo: TPalo;      
   end;
   TJugador = record
-    nifNumero: integer;
-    nifLetra: char;
+    nifNumero: 1..1000;
+    nifLetra: 'A'..'Z';
     rango: TRango;
     carta1, carta2, carta3: TCarta; 
     puntos: integer;  
@@ -48,20 +48,15 @@ procedure LeerJugador(var jugador: TJugador);
 var
   rango: integer;  
 begin
-  write('Escribe el numero del NIF: ');
+  write('Numero del NIF: ');
   readln(jugador.nifNumero);
-  write('Escribe la letra del NIF: ');
+  write('Letra del NIF: ');
   readln(jugador.nifLetra);
   
-  write('Escribe el rango (1: Invitado, 2: Aspirante, 3: Maestro): ');
-  readln(rango);
-  if rango = 1 then
-    jugador.rango := Invitado
-  else if rango = 2 then
-    jugador.rango := Aspirante
-  else if rango = 3 then
-    jugador.rango := Maestro;
-
+  write('Rango (Invitado, Aspirante, Maestro): ');
+  readln(jugador.rango);
+  
+  
   writeln('Ingrese las cartas del jugador:');
   LeerCarta(jugador.carta1);
   LeerCarta(jugador.carta2);
