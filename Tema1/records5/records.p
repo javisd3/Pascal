@@ -100,9 +100,9 @@ end;
 var
   jugador1, jugador2: TJugador;
 begin
-  writeln('Ingrese los datos del jugador 1:');
+  writeln('Datos del jugador 1:');
   LeerJugador(jugador1);
-  writeln('Ingrese los datos del jugador 2:');
+  writeln('Datos del jugador 2:');
   LeerJugador(jugador2);
 
   DeterminarGanador(jugador1, jugador2);
