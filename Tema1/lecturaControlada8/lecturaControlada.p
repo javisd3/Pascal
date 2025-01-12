@@ -18,7 +18,6 @@ const
   Tab: string = '   ';
 
 type
-  TipoPal = string;
   TipoPalabra = string[MaxPalabra];
   TipoNombre = (Submarino, Dragaminas, Fragata, Portaaviones, FIN);
   TipoOrientacion = (Horizontal, Vertical);
@@ -45,7 +44,7 @@ begin
   espacios := (c = Esp) or (c = Tab);  
 end;
 
-procedure addCaracter(var pal: TipoPal; c: char);
+procedure addCaracter(var pal: TipoPalabra; c: char);
 var
   n: Integer;
 begin
@@ -55,12 +54,12 @@ begin
   pal[n] := c;
 end;
 
-procedure borrar(var pal: TipoPal);
+procedure borrar(var pal: TipoPalabra);
 begin
 	pal := '';
 end;
 
-procedure leerpalabra(var fich: text; var pal: TipoPal);
+procedure leerpalabra(var fich: text; var pal: TipoPalabra);
 var
   haypalabra: boolean;
   c: char;
@@ -100,7 +99,7 @@ end;
 
 procedure leernombre(var fich: text; var nombre: TipoNombre; var ok: boolean);
 var
-  pal: TipoPal;
+  pal: TipoPalabra;
   pos: integer;
 begin
   leerpalabra(fich, pal);
@@ -110,7 +109,7 @@ end;
 
 procedure leerorientacion(var fich: text; var orientacion: TipoOrientacion; var ok: boolean);
 var
-  pal: TipoPal;
+  pal: TipoPalabra;
   pos: integer;
 begin
   leerpalabra(fich, pal);
@@ -132,7 +131,7 @@ end;
 
 procedure leercolumna(var fich: text; var c: integer; var ok: boolean);
 var
-  pal: TipoPal;
+  pal: TipoPalabra;
   pos: integer;
 begin
   leerpalabra(fich, pal);
@@ -143,7 +142,7 @@ end;
 
 procedure leerfila(var fich: text; var f: integer; var ok: boolean);
 var
-  pal: TipoPal;
+  pal: TipoPalabra;
   pos: integer;
 begin
   leerpalabra(fich, pal);
