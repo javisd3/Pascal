@@ -128,8 +128,7 @@ var
   sumaTotal: Integer;
   mismoColor: Boolean;
   color: TipoColor;
-
-  begin
+begin
   mismoColor := True;
   color := carton.Filas[1].Color;
   for i := 2 to 3 do
@@ -143,11 +142,11 @@ var
     carton.Media := 100;
     exit;
   end;
-  
-sumaTotal := 0;
-for i := 1 to 3 do
-  for j := 1 to 5 do
-  sumaTotal := sumaTotal + carton.Filas[i].Numeros[j]; 
+
+  sumaTotal := 0;
+  for i := 1 to 3 do
+    for j := 1 to 5 do
+      sumaTotal := sumaTotal + carton.Filas[i].Numeros[j];
   carton.Media := sumaTotal div 15;
 end;
 
