@@ -326,12 +326,22 @@ begin
   end;
 end;
 
+procedure EvaluarEstadisticas(barco: TipoBarco; var barcoMasGrande: TipoBarco; var primerBarco: boolean);
+begin
+    if primerBarco or (longitudbarco(barco) > longitudbarco(barcoMasGrande)) then
+    begin
+        barcoMasGrande := barco;
+        primerBarco := false;
+    end;
+end;
+
 var
   fich: text;
   Barcos: TipoBarcos;
   disparos: TipoDisparos;
   numBarcos, numDisparos, i: integer;
-  llegoFin, hayDisparos, puedeContinuar: boolean;
+  llegoFin, hayDisparos, puedeContinuar, primerBarco: boolean;
+  barcoMasGrande: TipoBarco;
   contarSubmarino, contarDragaminas, contarFragata, contarPortaaviones: integer;
 
 begin
@@ -339,7 +349,10 @@ begin
   reset(fich);
 
   leerBarcos(fich, Barcos, numBarcos, llegoFin);
-  puedeContinuar := llegoFin;
+  contarBarcos(Barcos, numBarcos, contarSubmarino, contarDragaminas, contarFragata, contarPortaaviones);
+  primerBarco := true;
+  for i := 1 to numBarcos do
+    EvaluarEstadisticas(Barcos[i], barcoMasGrande, primerBarco);
   contarBarcos(Barcos, numBarcos, contarSubmarino, contarDragaminas, contarFragata, contarPortaaviones);
   writeln('Submarinos: ', contarSubmarino);
   writeln('Dragaminas: ', contarDragaminas);
@@ -356,6 +369,7 @@ begin
     dibujartablero(Barcos, numBarcos);
     for i := 1 to numDisparos do
       realizarDisparo(disparos[i], Barcos, numBarcos);
+      writeln('Barco mas grande:' , barcoMasGrande.nombre);
   end;
 end.
 
