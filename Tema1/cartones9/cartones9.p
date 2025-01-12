@@ -13,7 +13,6 @@ const
   Tab: string = '   ';
 
 type
-  TipoPal = string;
   TipoPalabra = string[MaxPalabra];
   TipoColor = (rojo, verde, azul, amarillo);
   TipoNumero = 1..100; 
@@ -32,7 +31,7 @@ begin
   espacios := (c = Esp) or (c = Tab);  
 end;
 
-procedure addCaracter(var pal: TipoPal; c: char);
+procedure addCaracter(var pal: TipoPalabra; c: char);
 var
   n: Integer;
 begin
@@ -42,12 +41,12 @@ begin
   pal[n] := c;
 end;
 
-procedure borrar(var pal: TipoPal);
+procedure borrar(var pal: TipoPalabra);
 begin
 	pal := '';
 end;
 
-procedure leerpalabra(var fich: text; var pal: TipoPal);
+procedure leerpalabra(var fich: text; var pal: TipoPalabra);
 var
   haypalabra: boolean;
   c: char;
@@ -87,7 +86,7 @@ end;
 
 procedure leercolor(var fich: text; var color: TipoColor; var ok: boolean);
 var
-  pal: TipoPal;
+  pal: TipoPalabra;
   pos: Integer;
 begin
   leerpalabra(fich, pal);
@@ -97,7 +96,7 @@ end;
 
 procedure leernumero(var fich: Text; var numero: TipoNumero; var ok: Boolean);
 var
-  pal: TipoPal;
+  pal: TipoPalabra;
   pos: Integer;
   num: Integer;
 begin
