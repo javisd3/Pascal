@@ -1,8 +1,0 @@
-Submarino Horizontal A 1   
-Dragaminas Vertical B 3  
-Fragatcba Horizontal D 5 
-Portaaviones Horizontal C 2 
-Submarino Horizontal A 4
-FIN 2 A 1
-
-  
